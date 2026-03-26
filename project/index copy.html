@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rest In Airport - Airport Sleep Guides, Travel Tips & Overnight Resources 2026</title>
+  <meta name="description" content="Expert airport sleep guides, sleep pod locations, lounge reviews, and overnight travel tips for every major US airport. Find where to rest, sleep, and recharge between flights." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0f1118;
+      --paper: #f7f5f0;
+      --cream: #ede9e0;
+      --steel: #6b7280;
+      --accent: #1a3a5c;
+      --gold: #c9933a;
+      --sky: #e8f0f8;
+      --border: #d8d3c9;
+      --radius: 4px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* HEADER */
+    header {
+      background: var(--accent);
+      color: white;
+      padding: 0 24px;
+      position: sticky; top: 0; z-index: 100;
+      border-bottom: 3px solid var(--gold);
+    }
+    .header-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem; color: white; text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .logo span { color: var(--gold); }
+    nav { display: flex; gap: 28px; align-items: center; }
+    nav a {
+      color: rgba(255,255,255,0.85); text-decoration: none;
+      font-size: 0.875rem; font-weight: 500; transition: color 0.2s;
+    }
+    nav a:hover { color: var(--gold); }
+
+    /* HERO */
+    .hero {
+      background: var(--accent); color: white;
+      padding: 72px 24px 80px; text-align: center; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-eyebrow {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.25rem, 5vw, 3.5rem);
+      line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 20px;
+      max-width: 720px; margin-left: auto; margin-right: auto;
+    }
+    .hero p {
+      font-size: 1.0625rem; color: rgba(255,255,255,0.75);
+      max-width: 560px; margin: 0 auto 36px; line-height: 1.65;
+    }
+    .hero-cta { display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .btn {
+      display: inline-block; padding: 12px 28px; border-radius: var(--radius);
+      font-weight: 600; font-size: 0.9375rem; text-decoration: none; transition: all 0.2s;
+    }
+    .btn-primary { background: var(--gold); color: white; }
+    .btn-primary:hover { background: #b8832e; }
+    .btn-outline { border: 1.5px solid rgba(255,255,255,0.4); color: white; }
+    .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.08); }
+
+    /* LAYOUT */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 64px 0; }
+    .section-header {
+      display: flex; align-items: baseline; gap: 12px;
+      margin-bottom: 40px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
+    }
+    .section-header h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.75rem; letter-spacing: -0.02em; color: var(--ink);
+    }
+    .section-header .count {
+      font-size: 0.8rem; color: var(--steel); font-weight: 500;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .section-icon { font-size: 1.4rem; margin-right: 6px; }
+
+    /* PILLAR CARDS */
+    .pillar-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2px; background: var(--border); border: 1px solid var(--border);
+      border-radius: 8px; overflow: hidden;
+    }
+    .pillar-card {
+      background: var(--accent); color: white; padding: 40px 36px;
+      position: relative; overflow: hidden; text-decoration: none;
+      display: block; transition: background 0.2s;
+    }
+    .pillar-card:hover { background: #142e4a; }
+    .pillar-card::before {
+      content: ''; position: absolute; top: 0; right: 0;
+      width: 130px; height: 130px; background: var(--gold);
+      opacity: 0.07; border-radius: 50%; transform: translate(45px, -45px);
+    }
+    .pillar-badge {
+      display: inline-block; background: var(--gold); color: white;
+      font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 4px 10px; border-radius: 2px; margin-bottom: 16px;
+    }
+    .pillar-card h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.375rem; line-height: 1.3; margin-bottom: 12px;
+    }
+    .pillar-card p {
+      font-size: 0.9rem; color: rgba(255,255,255,0.68); line-height: 1.6; margin-bottom: 24px;
+    }
+    .pillar-card .read-more {
+      font-size: 0.875rem; font-weight: 600; color: var(--gold);
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .pillar-card .read-more::after { content: ' →'; }
+
+    /* POST GRID */
+    .post-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(278px, 1fr));
+      gap: 22px;
+    }
+    .post-card {
+      background: white; border: 1px solid var(--border); border-radius: 6px;
+      overflow: hidden; text-decoration: none; color: var(--ink);
+      display: flex; flex-direction: column;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .post-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); transform: translateY(-2px); }
+    .post-card-body { padding: 22px 22px 16px; flex: 1; display: flex; flex-direction: column; }
+    .post-tag {
+      display: inline-block; font-size: 0.6875rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 2px; margin-bottom: 12px;
+    }
+    .tag-sleep  { background: rgba(26,58,92,0.10); color: #1a3a5c; }
+    .tag-hotel  { background: rgba(45,106,79,0.10); color: #2d6a4f; }
+    .tag-lounge { background: rgba(123,45,139,0.10); color: #7b2d8b; }
+    .tag-transit{ background: rgba(180,80,20,0.10); color: #b45014; }
+    .post-card h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.075rem; line-height: 1.35; margin-bottom: 10px;
+    }
+    .post-card p { font-size: 0.875rem; color: var(--steel); line-height: 1.6; flex: 1; }
+    .post-meta {
+      padding: 13px 22px; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 0.785rem; color: var(--steel);
+    }
+    .post-meta .author { font-weight: 500; }
+
+    /* AIRPORT QUICK NAV */
+    .airport-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(138px, 1fr)); gap: 10px;
+    }
+    .airport-chip {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 16px 10px; background: white; border: 1px solid var(--border);
+      border-radius: 6px; text-decoration: none; color: var(--ink);
+      transition: all 0.2s; text-align: center;
+    }
+    .airport-chip:hover { background: var(--sky); border-color: var(--accent); }
+    .airport-chip .code {
+      font-family: 'DM Serif Display', serif; font-size: 1.5rem;
+      color: var(--accent); line-height: 1; margin-bottom: 4px;
+    }
+    .airport-chip .name { font-size: 0.72rem; color: var(--steel); line-height: 1.3; }
+
+    /* STAT STRIP */
+    .stat-strip {
+      background: var(--cream); border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border); padding: 40px 24px;
+    }
+    .stat-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 32px; text-align: center;
+    }
+    .stat-item .number {
+      font-family: 'DM Serif Display', serif; font-size: 2.5rem;
+      color: var(--accent); line-height: 1; margin-bottom: 6px;
+    }
+    .stat-item .label { font-size: 0.875rem; color: var(--steel); }
+
+    /* FOOTER */
+    footer {
+      background: var(--ink); color: rgba(255,255,255,0.6);
+      padding: 56px 24px 32px;
+    }
+    .footer-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px; margin-bottom: 48px;
+    }
+    .footer-brand p { font-size: 0.875rem; margin-top: 12px; line-height: 1.65; }
+    footer h5 {
+      font-size: 0.725rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: white; margin-bottom: 16px;
+    }
+    footer ul { list-style: none; }
+    footer ul li { margin-bottom: 10px; }
+    footer ul a {
+      color: rgba(255,255,255,0.52); text-decoration: none;
+      font-size: 0.875rem; transition: color 0.2s;
+    }
+    footer ul a:hover { color: var(--gold); }
+    .footer-bottom {
+      max-width: 1200px; margin: 0 auto; padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.8rem; color: rgba(255,255,255,0.3);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { display: none; }
+      .pillar-grid { grid-template-columns: 1fr; }
+      .post-grid { grid-template-columns: 1fr; }
+      .airport-grid { grid-template-columns: repeat(3, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="/" class="logo">Rest<span>In</span>Airport</a>
+    <nav>
+      <a href="#sleep-guides">Sleep Guides</a>
+      <a href="#airport-hotels">Hotels</a>
+      <a href="#airports">By Airport</a>
+      <a href="#lounges">Lounges</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Airport Travel Guides &amp; Sleep Tips Worldwide (2026)</div>
+  <h1>Find Where to Sleep,<br/>Rest &amp; Recharge at Any Airport</h1>
+  <p>Explore airport travel guides, sleep strategies, and layover tips to help you rest better during your journey. From sleep pods and transit hotels to lounges and overnight airport stays, find expert insights for smarter travel.</p>
+  <div class="hero-cta">
+    <a href="#sleep-guides" class="btn btn-primary">Explore Sleep Guides</a>
+    <a href="#airports" class="btn btn-outline">Browse by Airport</a>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stat-strip">
+  <div class="stat-grid">
+    <div class="stat-item"><div class="number">50+</div><div class="label">Airports Covered</div></div>
+    <div class="stat-item"><div class="number">15</div><div class="label">In-Depth Guides</div></div>
+    <div class="stat-item"><div class="number">200+</div><div class="label">Sleep Pod Locations</div></div>
+    <div class="stat-item"><div class="number">2026</div><div class="label">Updated For</div></div>
+  </div>
+</div>
+
+<!-- FEATURED PILLAR POSTS -->
+<section class="section" id="sleep-guides">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-icon">📖</span>
+      <h2>Featured Comprehensive Guides</h2>
+      <span class="count">3 Pillar Posts</span>
+    </div>
+    <div class="pillar-grid">
+
+      <a href="/airport-pods-for-sleeping" class="pillar-card">
+        <div class="pillar-badge">Pillar Post</div>
+        <h3>Airport Pods for Sleeping in the U.S.: Where to Find Them and How Overnight Airport Sleep Works</h3>
+        <p>Discover the best airport sleeping pods across major U.S. airports. Learn how sleep pods work, pricing, locations, and tips for making the most of your layover.</p>
+        <div class="read-more">Read Complete Guide</div>
+      </a>
+
+      <a href="/airport-hotel-airport" class="pillar-card">
+        <div class="pillar-badge">Pillar Post</div>
+        <h3>Best Airport Hotels &amp; Hotels Inside Airports: The Ultimate Guide</h3>
+        <p>Comprehensive guide to the best airport hotels in the U.S. Compare hotels inside airports, transit hotels, and find the best stay options for layovers and sleep-and-fly trips.</p>
+        <div class="read-more">Read Complete Guide</div>
+      </a>
+
+      <a href="/does-houston-airport-have-sleeping-pods" class="pillar-card">
+        <div class="pillar-badge">Pillar Post</div>
+        <h3>Does Houston Airport Have Sleeping Pods? Minute Suites IAH &amp; Full Sleep Guide</h3>
+        <p>Discover every sleep option at IAH including Minute Suites, free rest spots, lounges, and houston airport sleep pods cost. The definitive Houston airport overnight guide.</p>
+        <div class="read-more">Read Complete Guide</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- AIRPORT SLEEP GUIDES -->
+<section class="section" id="airports" style="background:var(--cream);">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-icon">🛌</span>
+      <h2>Airport Sleep Guides</h2>
+      <span class="count">By Location</span>
+    </div>
+    <div class="post-grid">
+
+      <a href="/sleeping-rooms-at-atlanta-airport" class="post-card">
+        <div class="post-card-body">
+          <span class="post-tag tag-sleep">Sleep Pods</span>
+          <h3>Sleeping Rooms at Atlanta Airport: Minute Suites, Nap Pods &amp; Best Rest Options</h3>
+          <p>Navigate sleeping options at the world's busiest airport. Minute Suites ATL locations, atlanta airport sleep pods cost, shower access, and free rest zones at Hartsfield-Jackson.</p>
+        </div>
+        <div class="post-meta">
+          <span class="author">By Matthew Lin</span>
+          <span class="date">March 19, 2026</span>
+        </div>
+      </a>
+
+      <a href="/sleeping-at-seatac" class="post-card">
+        <div class="post-card-body">
+          <span class="post-tag tag-sleep">Sleep &amp; Showers</span>
+          <h3>Sleeping at SeaTac: Sleep Pods, Seattle Airport Showers &amp; Overnight Guide</h3>
+          <p>Discover SeaTac sleep pods, Seattle airport shower facilities, best places to sleep for free, and the best sleep-and-fly hotel picks near SEA.</p>
+        </div>
+        <div class="post-meta">
+          <span class="author">By Matthew Lin</span>
+          <span class="date">March 19, 2026</span>
+        </div>
+      </a>
+
+      <a href="/sleeping-in-newark-airport" class="post-card">
+        <div class="post-card-body">
+          <span class="post-tag tag-sleep">Sleep Guide</span>
+          <h3>Sleeping in Newark Airport: EWR Overnight Guide &amp; Minute Suites</h3>
+          <p>Newark airport Minute Suites in Terminal C, best free sleeping areas, lounge options, and where to find showers at EWR.</p>
+        </div>
+        <div class="post-meta">
+          <span class="author">By Matthew Lin</span>
+          <span class="date">March 19, 2026</span>
+        </div>
+      </a>
+
+      <a href="/sleeping-pods-boston-airport" class="post-card">
+        <div class="post-card-body">
+          <span class="post-tag tag-sleep">Sleep Pods</span>
+          <h3>Sleeping Pods Boston Airport: Logan Airport Sleep &amp; Shower Guide</h3>
+          <p>Boston Logan airport sleeping options, boston airport showers, lounge access, free sleeping spots, and the only directly connected hotel at BOS.</p>
+        </div>
+        <div class="post-meta">
+          <span class="author">By Matthew Lin</span>
+          <span class="date">March 19, 2026</span>
+        </div>
+      </a>
+
+      <a href="/sleeping-at-lax" class="post-card">
+        <div class="post-card-body">
+          <span class="post-tag tag-sleep">Sleep Pods</span>
+          <h3>Sleeping at LAX: SleepBox Suites Terminal 5, Overnight Layover &amp; Nap Pod Guide</h3>
+          <p>SleepBox Suites LAX Terminal 5, lax nap pods, where to sleep at LAX for free, lounge access, and the best hotels for an LAX overnight layover.</p>
+        </div>
+        <div class="post-meta">
+          <span class="author">By Matthew Lin</span>
+          <span class="date">March 19, 2026</span>
+        </div>
+      </a>
+
+      <a href="/las-vegas-sleeping-pods" class="post-card">
+        <div class="post-card-body">
+          <span class="post-tag tag-sleep">Sleep Pods</span>
+          <h3>Las Vegas Airport Sleeping Pods: Harry Reid International Sleep Guide</h3>
+          <p>Harry Reid International airport sleeping pods, las vegas airport sleeping pods cost, nap pods at LAS, free sleeping spots, and nearby hotel options.</p>
+        </div>
+        <div class="post-meta">
+          <span class="author">By Matthew Lin</span>
+          <span class="date">March 19, 2026</span>
+        </div>
+      </a>
+
+      <a href="/sleep-pods-jfk-terminal-4" class="post-card">
+        <div class="post-card-body">
+          <span class="post-tag tag-sleep">Sleep Pods</span>
+          <h3>Sleep Pods JFK Terminal 4: JFK Overnight, Showers &amp; Capsule Hotel Guide</h3>
+          <p>Minute Suites JFK Terminal 4, JFK airport showers, jfk 24 hour lounge options, sleeping rooms at JFK, and where to sleep at JFK for free.</p>
+        </div>
+        <div class="post-meta">
+          <span class="author">By Matthew Lin</span>
+          <span class="date">March 19, 2026</span>
+        </div>
+      </a>
+
+      <a href="/does-orlando-airport-have-sleep-pods" class="post-card">
+        <div class="post-card-body">
+          <span class="post-tag tag-sleep">Sleep Pods</span>
+          <h3>Does Orlando Airport Have Sleep Pods? MCO Sleeping Options Guide</h3>
+          <p>MCO sleep pods via Minute Suites, places to sleep in Orlando airport for free, lounge access, and the Hyatt Regency directly connected to the terminal.</p>
+        </div>
+        <div class="post-meta">
+          <span class="author">By Matthew Lin</span>
+          <span class="date">March 19, 2026</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- AIRPORT LOUNGE & HOTEL GUIDES -->
+<section class="section" id="airport-hotels">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-icon">🛋️</span>
+      <h2>Airport Lounge &amp; Hotel Guides</h2>
+      <span class="count">Travel Planning</span>
+    </div>
+    <div class="post-grid">
+
+      <a href="/hotels-near-jfk" class="post-card">
+        <div class="post-card-body">
+          <span class="post-tag tag-hotel">Airport Hotels</span>
+          <h3>Hotels Near JFK Airport: Best Options for Every Budget in 2026</h3>
+          <p>Best hotels near JFK airport New York, the iconic TWA Hotel, cheap hotels near JFK, jfk hotels with airport shuttle, and where to sleep at JFK.</p>
+        </div>
+        <div class="post-meta">
+          <span class="author">By Matthew Lin</span>
+          <span class="date">March 19, 2026</span>
+        </div>
+      </a>
+
+      <a href="/hourly-hotels-near-me" class="post-card">
+        <div class="post-card-body">
+          <span class="post-tag tag-hotel">Short Stay Hotels</span>
+          <h3>Hourly Hotels Near Me: How to Rent a Hotel Room for a Few Hours</h3>
+          <p>Can you rent a hotel room for a few hours? Yes. Best platforms for pay by the hour hotels near airports, how short stay hotels work, and booking tips.</p>
+        </div>
+        <div class="post-meta">
+          <span class="author">By Matthew Lin</span>
+          <span class="date">March 19, 2026</span>
+        </div>
+      </a>
+
+      <a href="/closest-airport-to-red-rocks-amphitheatre" class="post-card">
+        <div class="post-card-body">
+          <span class="post-tag tag-transit">Travel Planning</span>
+          <h3>Closest Airport to Red Rocks Amphitheatre: Where to Fly Into</h3>
+          <p>Denver International is the closest airport to Red Rocks. Drive times, ground transport options, and the best places to stay near Red Rocks for events.</p>
+        </div>
+        <div class="post-meta">
+          <span class="author">By Matthew Lin</span>
+          <span class="date">March 19, 2026</span>
+        </div>
+      </a>
+
+      <a href="/how-to-get-to-the-airport-from-here" class="post-card">
+        <div class="post-card-body">
+          <span class="post-tag tag-transit">Transit Guide</span>
+          <h3>How to Get to the Airport From Here: Every Transport Option Explained</h3>
+          <p>Rideshare, taxis, hotel shuttles, public transit, and parking. Complete guide on how to get from here to the airport stress-free for every type of traveler.</p>
+        </div>
+        <div class="post-meta">
+          <span class="author">By Matthew Lin</span>
+          <span class="date">March 19, 2026</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- QUICK AIRPORT NAV -->
+<section class="section" style="background:var(--sky); padding:48px 0;" id="lounges">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-icon">✈️</span>
+      <h2>Find Guides by Airport Code</h2>
+    </div>
+    <div class="airport-grid">
+      <a href="/does-houston-airport-have-sleeping-pods" class="airport-chip">
+        <span class="code">IAH</span><span class="name">Houston George Bush</span>
+      </a>
+      <a href="/sleeping-rooms-at-atlanta-airport" class="airport-chip">
+        <span class="code">ATL</span><span class="name">Atlanta Hartsfield</span>
+      </a>
+      <a href="/sleeping-at-seatac" class="airport-chip">
+        <span class="code">SEA</span><span class="name">Seattle-Tacoma</span>
+      </a>
+      <a href="/sleeping-in-newark-airport" class="airport-chip">
+        <span class="code">EWR</span><span class="name">Newark Liberty</span>
+      </a>
+      <a href="/sleeping-pods-boston-airport" class="airport-chip">
+        <span class="code">BOS</span><span class="name">Boston Logan</span>
+      </a>
+      <a href="/sleeping-at-lax" class="airport-chip">
+        <span class="code">LAX</span><span class="name">Los Angeles</span>
+      </a>
+      <a href="/las-vegas-sleeping-pods" class="airport-chip">
+        <span class="code">LAS</span><span class="name">Las Vegas Harry Reid</span>
+      </a>
+      <a href="/sleep-pods-jfk-terminal-4" class="airport-chip">
+        <span class="code">JFK</span><span class="name">New York Kennedy</span>
+      </a>
+      <a href="/does-orlando-airport-have-sleep-pods" class="airport-chip">
+        <span class="code">MCO</span><span class="name">Orlando International</span>
+      </a>
+      <a href="/airport-pods-for-sleeping" class="airport-chip">
+        <span class="code">ORD</span><span class="name">Chicago O'Hare</span>
+      </a>
+      <a href="/airport-pods-for-sleeping" class="airport-chip">
+        <span class="code">LGA</span><span class="name">New York LaGuardia</span>
+      </a>
+      <a href="/airport-pods-for-sleeping" class="airport-chip">
+        <span class="code">DFW</span><span class="name">Dallas Fort Worth</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="/" class="logo" style="color:white;">Rest<span style="color:var(--gold)">In</span>Airport</a>
+      <p>Expert airport sleep guides, sleep pod directories, lounge reviews, and overnight travel tips for every major U.S. airport. All content fact-checked and updated for 2026.</p>
+    </div>
+    <div>
+      <h5>Sleep Pod Guides</h5>
+      <ul>
+        <li><a href="/airport-pods-for-sleeping">Airport Pods USA</a></li>
+        <li><a href="/sleeping-at-lax">LAX Sleep Pods</a></li>
+        <li><a href="/sleep-pods-jfk-terminal-4">JFK Terminal 4</a></li>
+        <li><a href="/las-vegas-sleeping-pods">Las Vegas LAS</a></li>
+        <li><a href="/does-orlando-airport-have-sleep-pods">Orlando MCO</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>By Airport</h5>
+      <ul>
+        <li><a href="/does-houston-airport-have-sleeping-pods">Houston IAH</a></li>
+        <li><a href="/sleeping-rooms-at-atlanta-airport">Atlanta ATL</a></li>
+        <li><a href="/sleeping-at-seatac">Seattle SEA</a></li>
+        <li><a href="/sleeping-in-newark-airport">Newark EWR</a></li>
+        <li><a href="/sleeping-pods-boston-airport">Boston BOS</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Hotels &amp; Travel</h5>
+      <ul>
+        <li><a href="/airport-hotel-airport">Airport Hotels</a></li>
+        <li><a href="/hotels-near-jfk">Hotels Near JFK</a></li>
+        <li><a href="/hourly-hotels-near-me">Hourly Hotels</a></li>
+        <li><a href="/how-to-get-to-the-airport-from-here">Airport Transit</a></li>
+        <li><a href="/closest-airport-to-red-rocks-amphitheatre">Red Rocks Airport</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 RestInAirport.com. All rights reserved.</span>
+    <span>Fact-checked and updated for 2026 travel.</span>
+  </div>
+</footer>
+
+</body>
+</html>
