@@ -22,9 +22,16 @@ interface BrandDetailPageProps {
   ssrData?: SSRBrandData;
 }
 
-function getBrandTypeLabel(brandType: BrandType): string {
+function getBrandH1Label(brandType: BrandType): string {
   if (brandType === 'Transit Hotel') return 'Transit Hotel';
-  if (brandType === 'Sleep Pods') return 'Sleep Pod';
+  if (brandType === 'Sleep Pods') return 'Sleep Pods';
+  if (brandType === 'Lounge Network') return 'Airport Lounge';
+  return 'Airport Rest Facility';
+}
+
+function getBrandTitleLabel(brandType: BrandType): string {
+  if (brandType === 'Transit Hotel') return 'Transit Hotel';
+  if (brandType === 'Sleep Pods') return 'Sleep Pods';
   if (brandType === 'Lounge Network') return 'Airport Lounge';
   return 'Airport Rest Facility';
 }
@@ -36,11 +43,11 @@ function getBrandTypePluralLabel(brandType: BrandType): string {
   return 'rest facilities';
 }
 
-function getTargetUsers(brandType: BrandType): string {
-  if (brandType === 'Transit Hotel') return 'transit passengers on long layovers, premium travelers, and anyone who needs a proper bed and shower without leaving the airport';
-  if (brandType === 'Sleep Pods') return 'budget-conscious travelers, those on medium to long layovers, and passengers who want affordable private rest without a full hotel booking';
-  if (brandType === 'Lounge Network') return 'frequent flyers without airline lounge access, business travelers, and anyone seeking a quieter environment with food and shower facilities';
-  return 'transit passengers, long-layover travelers, and anyone needing rest within the airport terminal';
+function getCategoryStatLabel(brandType: BrandType): string {
+  if (brandType === 'Transit Hotel') return 'Transit Hotel';
+  if (brandType === 'Sleep Pods') return 'Sleep Pods';
+  if (brandType === 'Lounge Network') return 'Lounge';
+  return 'Mixed';
 }
 
 export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageProps) {
@@ -96,7 +103,7 @@ export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageP
 
         const airportCount = new Set(matchedFacilities.map(f => f.airport_code)).size;
         const metaDesc = getBrandMetaDescription(matchedBrand.name, matchedBrand.brandType, matchedBrand.airportCodes, airportCount, brandSlug);
-        const typeLabel = getBrandTypeLabel(matchedBrand.brandType);
+        const titleLabel = getBrandTitleLabel(matchedBrand.brandType);
 
         const faqSchema = generateBrandFAQSchema(
           matchedBrand.name,
@@ -106,7 +113,7 @@ export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageP
         );
 
         updatePageMeta(
-          `${matchedBrand.name} – ${typeLabel} in Airports | Locations, Access & Pricing | RestInAirport`,
+          `${matchedBrand.name} ${titleLabel} – Airport Locations, Prices & Access | RestInAirport`,
           metaDesc,
           `${window.location.origin}/brand/${brandSlug}`,
           faqSchema
@@ -128,9 +135,9 @@ export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageP
         new Map(facilities.map(f => [f.airport_code, { code: f.airport_code, name: f.airport }])).values()
       ).sort((a, b) => a.name.localeCompare(b.name));
 
-  const typeLabel = brandMeta ? getBrandTypeLabel(brandMeta.brandType) : 'Airport Rest Facility';
+  const h1Label = brandMeta ? getBrandH1Label(brandMeta.brandType) : 'Airport Rest Facility';
+  const titleLabel = brandMeta ? getBrandTitleLabel(brandMeta.brandType) : 'Airport Rest Facility';
   const typePluralLabel = brandMeta ? getBrandTypePluralLabel(brandMeta.brandType) : 'rest facilities';
-  const targetUsers = brandMeta ? getTargetUsers(brandMeta.brandType) : 'transit passengers';
 
   const activeBrandName = brandName || brandSlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
@@ -149,7 +156,7 @@ export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageP
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col">
         <Helmet>
-          <title>{slugTitle} – Airport Rest Facility | Locations, Access & Pricing | RestInAirport</title>
+          <title>{slugTitle} Transit Hotel – Airport Locations, Prices & Access | RestInAirport</title>
           <meta name="description" content={`Discover ${slugTitle} airport rest facilities. View locations, access rules, pricing, and whether transit passengers can stay without clearing immigration.`} />
           <link rel="canonical" href={`https://restinairport.com/brand/${brandSlug}`} />
           <meta property="og:title" content={`${slugTitle} – Airport Rest Facility | RestInAirport`} />
@@ -189,15 +196,15 @@ export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageP
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col">
       <Helmet>
-        <title>{activeBrandName} – {typeLabel} in Airports | Locations, Access & Pricing | RestInAirport</title>
+        <title>{activeBrandName} {titleLabel} – Airport Locations, Prices & Access | RestInAirport</title>
         <meta name="description" content={metaDesc} />
         <link rel="canonical" href={`https://restinairport.com/brand/${brandSlug}`} />
-        <meta property="og:title" content={`${activeBrandName} – ${typeLabel} | Locations, Access & Pricing | RestInAirport`} />
+        <meta property="og:title" content={`${activeBrandName} ${titleLabel} – Airport Locations, Prices & Access | RestInAirport`} />
         <meta property="og:description" content={metaDesc} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`https://restinairport.com/brand/${brandSlug}`} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${activeBrandName} – ${typeLabel} | RestInAirport`} />
+        <meta name="twitter:title" content={`${activeBrandName} ${titleLabel} | RestInAirport`} />
         <meta name="twitter:description" content={metaDesc} />
       </Helmet>
       <Header />
@@ -211,14 +218,14 @@ export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageP
               className="inline-flex items-center text-slate-200 hover:text-white mb-6 transition-colors"
             />
 
-            <div className="mb-2">
+            <div className="mb-3">
               <span className="inline-block text-xs font-semibold uppercase tracking-widest text-slate-300 bg-slate-700 px-3 py-1 rounded-full">
-                {typeLabel}
+                Transit Hotel
               </span>
             </div>
 
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              {activeBrandName}{typeLabel.startsWith('Airport') ? '' : ' Airport'} {typeLabel}
+              {activeBrandName} {h1Label}
             </h1>
 
             <p className="text-lg text-slate-200 max-w-3xl mb-8 leading-relaxed">
@@ -243,7 +250,7 @@ export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageP
               <div className="flex items-center space-x-2">
                 <Users className="w-6 h-6" />
                 <div>
-                  <div className="text-2xl font-bold capitalize">{brandMeta?.brandType === 'Transit Hotel' ? 'Hotel' : brandMeta?.brandType === 'Sleep Pods' ? 'Pods' : 'Lounge'}</div>
+                  <div className="text-2xl font-bold">{brandMeta ? getCategoryStatLabel(brandMeta.brandType) : 'Transit Hotel'}</div>
                   <div className="text-sm text-slate-300">Category</div>
                 </div>
               </div>
@@ -253,19 +260,11 @@ export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageP
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-14">
 
-          <section>
-            <h2 className="text-2xl font-bold text-slate-900 mb-3">Overview</h2>
-            <p className="text-slate-600 leading-relaxed max-w-3xl">
-              {activeBrandName} operates as an airport {typeLabel.toLowerCase()} providing {typePluralLabel} to {targetUsers}.
-              The brand maintains {facilityCount} {facilityCount === 1 ? 'facility' : 'facilities'} across {airportCount} {airportCount === 1 ? 'airport' : 'airports'}.
-            </p>
-          </section>
-
           {uniqueAirports.length > 0 && (
             <section>
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">Where You Can Find {activeBrandName}</h2>
-              <p className="text-slate-600 mb-5 max-w-3xl">
-                {activeBrandName} currently operates at the following airports. Each location may have different terminal placement and access rules — verify your specific terminal when booking.
+              <h2 className="text-2xl font-bold text-slate-900 mb-3">Where You'll Find {activeBrandName}</h2>
+              <p className="text-slate-600 mb-5 max-w-3xl leading-relaxed">
+                {activeBrandName} operates at {airportCount} {airportCount === 1 ? 'airport' : 'airports'} worldwide. Terminal placement and access rules differ by location — confirm your specific terminal before travel.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-w-3xl">
                 {uniqueAirports.map(airport => (
@@ -285,6 +284,54 @@ export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageP
             </section>
           )}
 
+          {uniqueAirports.length === 0 && (
+            <section>
+              <h2 className="text-2xl font-bold text-slate-900 mb-3">Where You'll Find {activeBrandName}</h2>
+              <p className="text-slate-600 max-w-3xl leading-relaxed">
+                {activeBrandName} is available in major international transit hubs. Check the listings below for specific terminal locations and access details.
+              </p>
+            </section>
+          )}
+
+          <section>
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">Is {activeBrandName} Right for Your Layover?</h2>
+            <p className="text-slate-600 mb-5 max-w-3xl leading-relaxed">
+              Whether {activeBrandName} suits your layover depends on connection length, budget, and what you need from your rest stop.
+            </p>
+            <div className="grid sm:grid-cols-3 gap-4 max-w-3xl mb-5">
+              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+                <p className="text-xs font-semibold text-emerald-700 uppercase tracking-wider mb-2">Best for</p>
+                <p className="text-slate-700 text-sm leading-relaxed">
+                  {brandMeta?.brandType === 'Transit Hotel'
+                    ? 'Long layovers of 4+ hours, passengers without exit visas, premium travelers wanting a proper bed and shower'
+                    : brandMeta?.brandType === 'Sleep Pods'
+                    ? 'Short to medium layovers, budget travelers, passengers wanting affordable rest without a booking process'
+                    : 'Frequent flyers without lounge access, long pre-departure waits, those wanting food and showers in a calm setting'}
+                </p>
+              </div>
+              <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                <p className="text-xs font-semibold text-amber-700 uppercase tracking-wider mb-2">Not ideal for</p>
+                <p className="text-slate-700 text-sm leading-relaxed">
+                  {brandMeta?.brandType === 'Transit Hotel'
+                    ? 'Budget travelers or those with connections under 2 hours where the value may not justify the cost'
+                    : brandMeta?.brandType === 'Sleep Pods'
+                    ? 'Travelers needing full privacy, shower access, or hotel-level amenities for longer stays'
+                    : 'Very short connections where entry fees may not represent value for time spent'}
+                </p>
+              </div>
+              <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Access</p>
+                <p className="text-slate-700 text-sm leading-relaxed">
+                  {brandMeta?.brandType === 'Transit Hotel'
+                    ? 'Typically airside — no immigration clearance needed for transit passengers at most locations'
+                    : brandMeta?.brandType === 'Sleep Pods'
+                    ? 'Generally airside in terminal departures areas, accessible without clearing customs'
+                    : 'Varies by location — most lounges are airside but confirm before your journey'}
+                </p>
+              </div>
+            </div>
+          </section>
+
           <section>
             <h2 className="text-2xl font-bold text-slate-900 mb-4">Access Rules</h2>
             <div className="grid sm:grid-cols-2 gap-4 max-w-3xl">
@@ -295,10 +342,10 @@ export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageP
                 </div>
                 <p className="text-sm text-slate-600 leading-relaxed">
                   {brandMeta?.brandType === 'Transit Hotel'
-                    ? `${activeBrandName} transit hotel rooms are typically located airside — inside the secure terminal zone after passport control. Most locations do not require you to exit and re-enter immigration.`
+                    ? `${activeBrandName} transit hotel rooms are typically located airside — inside the secure terminal zone after passport control. Most locations do not require exiting and re-entering immigration.`
                     : brandMeta?.brandType === 'Sleep Pods'
                     ? `${activeBrandName} sleep pods are generally located in the airside terminal area. You can access them without clearing customs, making them suitable for transit passengers on tight connections.`
-                    : `${activeBrandName} lounge locations are typically situated airside within the international departures area. Access does not usually require clearing immigration for transit passengers.`
+                    : `${activeBrandName} lounge locations are typically situated airside within international departures. Access does not usually require clearing immigration for transit passengers.`
                   }
                 </p>
               </div>
@@ -315,7 +362,7 @@ export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageP
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-slate-900 mb-4">Pricing Insight</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">Pricing</h2>
             <div className="bg-white border border-slate-200 rounded-xl p-6 max-w-2xl">
               <div className="flex items-center gap-2 mb-4">
                 <Clock className="w-5 h-5 text-slate-600" />
