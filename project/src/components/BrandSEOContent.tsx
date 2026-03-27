@@ -15,26 +15,33 @@ interface BrandSEOContentProps {
   allBrandSlugs: { name: string; slug: string }[];
 }
 
-const BRAND_DESCRIPTIONS: Record<string, {
+export interface BrandDescriptionData {
   overview: string;
   coverage: string;
   verdict: string;
   bestFor: string;
   notIdealFor: string;
-  downside: string;
-  metaDescription?: string;
-  intro?: string;
-  faqs?: Array<{ q: string; a: string }>;
-  closingParagraph?: string;
-}> = {
+  accessModel: string;
+  sleepFormat: string;
+  downside?: string;
+  metaDescription: string;
+  intro: string;
+  faqs: Array<{ q: string; a: string }>;
+  closingParagraph: string;
+  thinContent?: boolean;
+}
+
+const BRAND_DESCRIPTIONS: Record<string, BrandDescriptionData> = {
   'aerotel': {
     overview: 'Aerotel is one of the most established airside transit hotel brands in the world, operating fully enclosed private rooms inside international terminal buildings. Rooms come with a proper bed, private shower, and Wi-Fi — none of which requires clearing immigration to access. The brand was pioneered at Singapore Changi and has expanded to major hubs across Asia, the Middle East, and Europe. For transit passengers who need genuine recovery time, Aerotel delivers hotel-quality rest in a compact, terminal-integrated format.',
     coverage: 'Aerotel operates at several of the world\'s busiest international airports, concentrating on major transit hubs in Asia and the Middle East. Key locations include Singapore Changi (SIN), London Heathrow (LHR), and Abu Dhabi (AUH). The brand focuses on high-traffic layover routes where passengers regularly face long connections between international flights.',
     verdict: 'Aerotel is an excellent choice for travelers who need genuine rest on a long layover without the hassle of leaving the airport. The airside location is particularly valuable for passengers without the required visa to exit.',
     bestFor: 'Long layovers of 4+ hours, passengers without exit visas, travelers who want a proper bed and shower',
     notIdealFor: 'Budget travelers or those with short connections under 2 hours',
+    accessModel: 'Airside — no immigration clearance needed. Located within the secure terminal zone at all served airports.',
+    sleepFormat: 'Private enclosed rooms with a real bed, en-suite shower, desk, and Wi-Fi. Bookable by the hour (typically 3–6 hour minimum) or overnight.',
     downside: 'Rates can be high compared to sleep pods, and availability at peak times is not guaranteed without advance booking.',
-    metaDescription: 'Aerotel offers transit hotels inside airports at Singapore Changi, London Heathrow, and Abu Dhabi — private rooms with showers for layovers and overnight connections, no immigration clearance required.',
+    metaDescription: 'Aerotel transit hotel at Singapore Changi, London Heathrow & Abu Dhabi — private airside rooms with showers, no immigration clearance needed.',
     intro: 'Aerotel operates airside transit hotels at major international hubs including Singapore Changi, London Heathrow, and Abu Dhabi. Private rooms with en-suite showers are available by the hour for transit passengers, with no requirement to clear immigration. This guide covers Aerotel locations, access rules, pricing, and transit passenger eligibility.',
     faqs: [
       {
@@ -74,8 +81,10 @@ const BRAND_DESCRIPTIONS: Record<string, {
     verdict: 'GoSleep suits travelers who want affordable, no-frills rest without committing to a hotel booking. The pay-as-you-go approach works well for layovers of 1–4 hours.',
     bestFor: 'Short to medium layovers, budget-conscious travelers, passengers wanting a quick rest without a booking process',
     notIdealFor: 'Passengers needing full privacy, shower access, or hotel-level amenities',
+    accessModel: 'Fully self-service — no check-in required. Walk up to any available pod, pay at the unit, and rest.',
+    sleepFormat: 'Semi-enclosed seat with privacy visor. Flat-reclining position suitable for rest. No full enclosure — partial noise and light reduction only.',
     downside: 'The visor provides partial privacy only — it is not a fully enclosed space, and terminal noise can still be noticeable.',
-    metaDescription: 'GoSleep sleep pods are available at airports across Europe and the Middle East — hourly-rate pods with privacy visors, no check-in required, suitable for transit passengers of all budgets.',
+    metaDescription: 'GoSleep sleep pods at airports in Europe & the Middle East — self-service hourly pods with privacy visors, no booking required for transit passengers.',
     intro: 'GoSleep operates self-service sleep pods at airports across Europe, Asia, and the Middle East. Pods feature a reclining seat and privacy visor, available by the hour with no check-in required. This guide covers GoSleep pod locations, pricing, access rules, and transit passenger eligibility.',
     faqs: [
       {
@@ -103,7 +112,7 @@ const BRAND_DESCRIPTIONS: Record<string, {
         a: 'No advance booking is required for most GoSleep locations — the pods operate on a walk-in, self-service basis. At busy hub airports during peak travel periods, arriving early is advisable to secure a pod.',
       },
     ],
-    closingParagraph: 'GoSleep offers one of the simplest rest options available at airports — no check-in, no booking process, and an hourly price point that works for budget travelers and short layovers alike. Available across airports in Europe, the Middle East, and Asia, GoSleep pods are particularly suited to transit passengers who need a few hours of rest without the cost of a full transit hotel room. Explore all sleep pod options on RestInAirport, or browse transit hotels and airport lounge options if you need additional amenities or a longer stay.',
+    closingParagraph: 'GoSleep offers one of the simplest rest options available at airports — no check-in, no booking process, and an hourly price point that works for budget travelers and short layovers alike. Available across airports in Europe, the Middle East, and Asia, GoSleep pods are particularly suited to transit passengers who need a few hours of rest without the cost of a full transit hotel room. Explore all sleep pod options on RestInAirport, or browse transit hotels and airport lounges if you need additional amenities or a longer stay.',
   },
   'yotelair': {
     overview: 'YOTELAIR is a premium transit hotel brand operating compact, cabin-style accommodation inside major international airport terminals. Cabins include a proper bed, private bathroom with rainfall shower, in-room entertainment, and hotel services — all in a smartly designed small-footprint format. YOTELAIR has a strong presence at European hub airports and has extended into North American locations, appealing to premium economy and business travelers who want hotel-quality recovery without leaving the terminal.',
@@ -111,8 +120,10 @@ const BRAND_DESCRIPTIONS: Record<string, {
     verdict: 'YOTELAIR is the strongest choice for travelers who want hotel-quality rest without leaving the terminal. The private cabin with en-suite shower is among the best airside rest options available at the airports it serves.',
     bestFor: 'Long layovers, premium travelers, those wanting a proper shower and bed before a connecting flight',
     notIdealFor: 'Budget travelers — YOTELAIR is priced at the higher end of the airside accommodation market',
+    accessModel: 'Airside at most locations — within the international departures zone. No immigration clearance needed for transit passengers.',
+    sleepFormat: 'Fully private cabin with lockable door, SmartBed with fresh linen, rainfall shower, in-cabin entertainment, and Wi-Fi. Hourly minimum or overnight rate.',
     downside: 'Availability can be limited during peak travel periods, and cabins book out quickly at popular hubs.',
-    metaDescription: 'YOTELAIR offers premium transit hotel cabins at Amsterdam Schiphol, London Heathrow, Paris CDG, and New York JFK — private rooms with showers, hourly booking, no immigration clearance required.',
+    metaDescription: 'YOTELAIR transit hotel cabins at Amsterdam Schiphol, London Heathrow, Paris CDG & New York JFK — private rooms with showers, hourly booking, airside access.',
     intro: 'YOTELAIR operates premium transit hotel cabins at major airports including Amsterdam Schiphol, London Heathrow, Paris Charles de Gaulle, and New York JFK. Private cabins with en-suite showers are available by the hour or overnight for transit passengers without leaving the terminal. This guide covers YOTELAIR locations, pricing, access rules, and booking guidance.',
     faqs: [
       {
@@ -148,8 +159,10 @@ const BRAND_DESCRIPTIONS: Record<string, {
     verdict: 'Napcabs is the best sleep pod option for travelers who need true privacy and darkness during a layover. The locked cabin experience is noticeably superior to open-visor pod brands.',
     bestFor: 'Travelers wanting maximum privacy in a pod format, overnight layovers, light sleepers who need noise control',
     notIdealFor: 'Those who find enclosed spaces uncomfortable or who need shower access',
+    accessModel: 'Airside at Munich Airport T1 and T2. No immigration clearance required. Available by the hour via self-service booking.',
+    sleepFormat: 'Fully enclosed lockable cabin with blackout conditions and noise reduction. Flat sleeping surface. Closer to a private room than a typical pod.',
     downside: 'Limited airport coverage — most accessible for travelers routing through Munich.',
-    metaDescription: 'Napcabs operates fully enclosed private sleeping cabins at Munich Airport and select international airports — lockable pods with blackout conditions, hourly booking, no immigration clearance needed.',
+    metaDescription: 'Napcabs fully enclosed sleep pod cabins at Munich Airport T1 & T2 — lockable blackout capsules, hourly booking, no immigration needed for transit passengers.',
     intro: 'Napcabs offers fully enclosed private sleeping cabins at Munich Airport (MUC) and select international locations. Each cabin is lockable with blackout conditions and noise reduction, bookable by the hour. This guide covers Napcabs cabin locations, pricing, access rules, and transit passenger eligibility.',
     faqs: [
       {
@@ -185,8 +198,10 @@ const BRAND_DESCRIPTIONS: Record<string, {
     verdict: 'Plaza Premium is the best lounge option for travelers without airline lounge access who still want a quiet, comfortable environment with food and showers during a long wait.',
     bestFor: 'Frequent flyers without airline lounge access, long layovers, travelers wanting food and shower facilities',
     notIdealFor: 'Very short connections where the entry fee may not represent value',
+    accessModel: 'Open to all passengers — no airline or loyalty program membership required. Paid per visit, or via compatible credit cards and travel programs.',
+    sleepFormat: 'Lounge seating with dedicated rest zones at select locations. Not a sleep pod or hotel — designed for comfort and amenities rather than full sleep.',
     downside: 'Entry fees vary significantly by location and can be expensive at peak times, particularly for walk-in access.',
-    metaDescription: 'Plaza Premium is an independent airport lounge network available at 100+ airports across Asia, the Middle East, and Europe — open to all passengers, with food, showers, and Wi-Fi by the visit.',
+    metaDescription: 'Plaza Premium independent airport lounges at 100+ airports across Asia, the Middle East & Europe — open to all passengers, food, showers, and Wi-Fi included.',
     intro: 'Plaza Premium operates independent airport lounges at over 100 airports across Asia-Pacific, the Middle East, and Europe. Lounge access is open to any passenger regardless of airline or frequent flyer status, with food, showers, and Wi-Fi included. This guide covers Plaza Premium lounge locations, entry pricing, access rules, and transit passenger eligibility.',
     faqs: [
       {
@@ -222,8 +237,10 @@ const BRAND_DESCRIPTIONS: Record<string, {
     verdict: 'Minute Suites is the best private rest option available inside US airports, offering a level of privacy and comfort that no pod brand matches in the domestic market.',
     bestFor: 'Business travelers, families with young children, anyone needing a private space for calls or rest during a US layover',
     notIdealFor: 'International travelers outside the served US airports',
+    accessModel: 'Airside at all US locations — no security re-clearance needed. Book by the hour via the front desk or online.',
+    sleepFormat: 'Fully enclosed private suite with a daybed sofa, work desk, TV, and Wi-Fi. Optional shower at select airports. Suitable for sleep, work, or private calls.',
     downside: 'Coverage is limited to a handful of US airports, making it unavailable for most international routing.',
-    metaDescription: 'Minute Suites offers private hourly rest suites at US airports including Atlanta, Philadelphia, Dallas Fort Worth, and Charlotte Douglas — fully enclosed rooms with daybeds, desks, and optional showers.',
+    metaDescription: 'Minute Suites private hourly rest suites at Atlanta, Philadelphia, Dallas Fort Worth & Charlotte Douglas airports — enclosed rooms with daybeds, desks, and optional showers.',
     intro: 'Minute Suites operates private hourly rest suites at major US airport hubs including Atlanta Hartsfield-Jackson, Philadelphia, Dallas Fort Worth, and Charlotte Douglas. Each suite is fully enclosed with a daybed, workspace, and TV — ideal for business travelers and families on domestic layovers. This guide covers Minute Suites locations, pricing, access rules, and what to expect.',
     faqs: [
       {
@@ -259,8 +276,10 @@ const BRAND_DESCRIPTIONS: Record<string, {
     verdict: 'For travelers transiting through Bangkok Suvarnabhumi, Miracle lounges represent one of the best independent lounge options available, particularly for those without airline-specific access.',
     bestFor: 'Passengers transiting through Bangkok, travelers wanting a premium break at BKK without airline lounge access',
     notIdealFor: 'Travelers routing through airports other than Bangkok Suvarnabhumi',
+    accessModel: 'Open to all passengers at Bangkok Suvarnabhumi — paid per visit, with tiered pricing by lounge class. Airside, no visa required for transit.',
+    sleepFormat: 'Lounge seating with dedicated rest zones. Food, beverages, and showers included by tier. Not a pod or hotel — designed for comfort and relaxation.',
     downside: 'The brand has no presence outside BKK, limiting its appeal to Bangkok transit passengers only.',
-    metaDescription: 'Miracle Lounge operates multiple lounge tiers at Bangkok Suvarnabhumi Airport (BKK) — open to all passengers, with food, showers, and rest areas by the visit, no airline membership required.',
+    metaDescription: 'Miracle Lounge at Bangkok Suvarnabhumi Airport (BKK) — multiple lounge tiers open to all passengers, food, showers, and rest areas, no airline membership required.',
     intro: 'Miracle is an independent airport lounge brand operating Business Class and First Class lounge tiers at Bangkok Suvarnabhumi Airport (BKK). Access is open to any passenger via paid entry, with food, beverages, showers, and rest areas included. This guide covers Miracle lounge tiers, pricing, access rules, and transit passenger eligibility at BKK.',
     faqs: [
       {
@@ -296,8 +315,10 @@ const BRAND_DESCRIPTIONS: Record<string, {
     verdict: 'izZzleep suits travelers who want enclosed privacy and genuine sleep quality without the cost of a full transit hotel room.',
     bestFor: 'Travelers wanting a private pod with real sleep quality, medium to long layovers',
     notIdealFor: 'Those needing shower access or a full hotel check-in experience',
+    accessModel: 'Airside at all operated locations. Self-service booking by the hour — no front desk check-in needed at most sites.',
+    sleepFormat: 'Fully enclosed private capsule with climate control, adjustable lighting, and secure luggage storage. Flat sleep surface. Significantly more private than open-visor pod designs.',
     downside: 'Coverage is limited and still expanding; availability at your specific airport should be checked in advance.',
-    metaDescription: 'izZzleep offers enclosed private sleep pods at select international airports — fully private capsules with climate control and luggage storage, bookable by the hour for transit passengers.',
+    metaDescription: 'izZzleep enclosed private sleep pod capsules at select international airports — climate-controlled, fully private, hourly booking for transit passengers.',
     intro: 'izZzleep operates fully enclosed sleep pod capsules at select international airports in Europe and Asia. Each pod includes climate control, lighting, and secure storage, available by the hour. This guide covers izZzleep pod locations, pricing, access rules, and transit passenger eligibility.',
     faqs: [
       {
@@ -333,8 +354,10 @@ const BRAND_DESCRIPTIONS: Record<string, {
     verdict: 'Encalm is the strongest all-in-one rest option for travelers transiting through Indian international airports, offering more flexibility than single-category brands.',
     bestFor: 'Passengers transiting through India, travelers wanting lounge or hotel access at Indian hub airports',
     notIdealFor: 'Travelers not routing through India or expecting global multi-airport coverage',
+    accessModel: 'Open to all passengers at Delhi Airport. Airside access available for transit passengers. Tiered pricing by service level — lounge, pod, or hotel room.',
+    sleepFormat: 'Multi-tier: lounge seating for short waits, sleep pods for rest, and full transit hotel rooms for longer stays. Choose the tier that matches your layover length.',
     downside: 'Coverage is concentrated in India, limiting utility for travelers on routes that do not pass through Indian airports.',
-    metaDescription: 'Encalm is an all-in-one airport hospitality brand at Delhi Indira Gandhi Airport offering lounges, sleep pods, and transit hotel rooms — open to all passengers, flexible pricing by service level.',
+    metaDescription: 'Encalm airport hospitality at Delhi Indira Gandhi Airport — lounges, sleep pods, and transit hotel rooms in one facility, open to all passengers.',
     intro: 'Encalm operates a mixed-category airport hospitality facility at Delhi Indira Gandhi International Airport (DEL), combining lounge access, sleep pods, and transit hotel rooms under one brand. Travelers can choose the service tier that fits their layover length and budget. This guide covers Encalm locations, service tiers, pricing, and transit passenger eligibility.',
     faqs: [
       {
@@ -364,6 +387,175 @@ const BRAND_DESCRIPTIONS: Record<string, {
     ],
     closingParagraph: 'Encalm fills an important gap in the Indian airport market by offering multiple rest options under one brand — from a quick lounge visit to a full transit hotel room. For passengers transiting through Delhi Indira Gandhi Airport, it provides flexibility that is hard to find at most airports globally. Browse all transit hotel and sleep pod options on RestInAirport, or explore airport lounges for lighter rest alternatives on your routing.',
   },
+  'zzzleepandgo': {
+    overview: 'ZZZleepandGo is an Italian airport sleep pod brand operating self-service rest capsules inside Italian airport terminals. The pods are designed for quick, affordable rest during short layovers — a semi-enclosed format that is available by the hour without a booking requirement. The brand is part of the growing European wave of self-service pod concepts positioned as a practical alternative to sitting in the departures hall.',
+    coverage: 'ZZZleepandGo operates at Italian airports, with a focus on key Italian hubs. The brand serves domestic and international passengers transiting through Italy who need a short rest without the cost or commitment of a full transit hotel.',
+    verdict: 'ZZZleepandGo is a practical option for short layovers at Italian airports where a proper rest room is not available or is too expensive.',
+    bestFor: 'Short layovers at Italian airports, budget travelers, passengers wanting a quick rest without booking',
+    notIdealFor: 'Travelers expecting full enclosure, shower access, or hotel-level comfort',
+    accessModel: 'Self-service, walk-in access. No booking required. Hourly payment at the pod terminal.',
+    sleepFormat: 'Semi-enclosed pod design with a reclining seat. Limited noise reduction. Suitable for short rest periods of 1–3 hours.',
+    downside: 'Coverage is limited to Italian airports, and the semi-enclosed design provides less privacy than fully enclosed pod brands.',
+    metaDescription: 'ZZZleepandGo self-service sleep pods at Italian airports — hourly rest capsules, no booking required, suitable for short layovers in Italy.',
+    intro: 'ZZZleepandGo operates self-service sleep pod capsules at Italian airport terminals. Pods are available by the hour with no booking requirement, designed for short layover rest. This guide covers ZZZleepandGo locations, pricing, and access rules.',
+    faqs: [
+      {
+        q: 'Where can I find ZZZleepandGo pods?',
+        a: 'ZZZleepandGo operates at Italian airports. Check the facility listings on RestInAirport for the specific terminals and airports where pods are currently available.',
+      },
+      {
+        q: 'Do ZZZleepandGo pods require a booking?',
+        a: 'No. ZZZleepandGo pods operate on a self-service, walk-in basis. You pay at the pod terminal for the hours you need with no advance reservation required.',
+      },
+      {
+        q: 'Are ZZZleepandGo pods fully enclosed?',
+        a: 'ZZZleepandGo pods use a semi-enclosed design. They provide more privacy than an open airport seat but are not fully enclosed like Napcabs or izZzleep capsules.',
+      },
+      {
+        q: 'How much do ZZZleepandGo pods cost?',
+        a: 'ZZZleepandGo charges by the hour. Rates are displayed at the pod terminal before payment. Pricing is typically comparable to or lower than fully enclosed pod brands.',
+      },
+    ],
+    closingParagraph: 'ZZZleepandGo provides a simple, accessible rest option for travelers passing through Italian airports on short layovers. While the semi-enclosed design has its limitations, the no-booking, hourly model makes it one of the quickest ways to get a rest break inside an Italian terminal. Compare all sleep pod brands on RestInAirport, or browse transit hotels for a more private and amenity-rich experience.',
+  },
+  'kepler-club': {
+    overview: 'Kepler Club is a premium independent airport lounge brand offering high-quality lounge access at select international airports. The brand positions itself in the upper tier of independent lounges, with a focus on food quality, comfort, and a calm environment. Kepler Club is open to all passengers regardless of airline or ticket class, with paid access per visit.',
+    coverage: 'Kepler Club operates at a select number of international airports. The brand targets premium positioning at airports where travelers are willing to pay for a higher standard of independent lounge than standard options provide.',
+    verdict: 'Kepler Club is a strong choice for passengers seeking premium lounge facilities without relying on airline status or business class tickets.',
+    bestFor: 'Travelers wanting a premium independent lounge experience, long layovers, passengers without airline lounge access',
+    notIdealFor: 'Budget travelers — Kepler Club is priced at the premium end of the independent lounge market',
+    accessModel: 'Open to all passengers — paid per visit. No airline or loyalty program required. Airside at served airports.',
+    sleepFormat: 'Premium lounge seating with comfortable rest zones. Not a sleep pod or hotel — designed for elevated lounge comfort with quality food and amenities.',
+    metaDescription: 'Kepler Club premium airport lounge at select international airports — open to all passengers, high-quality food and amenities, paid per visit.',
+    intro: 'Kepler Club operates premium independent airport lounges at select international airports. The brand is open to any passenger via paid entry, with a focus on food quality, comfortable seating, and a calm environment. This guide covers Kepler Club locations, pricing, and access rules.',
+    faqs: [
+      {
+        q: 'Is Kepler Club open to all passengers?',
+        a: 'Yes. Kepler Club is open to any passenger regardless of airline, ticket class, or loyalty status. Access is available through a paid visit fee.',
+      },
+      {
+        q: 'What makes Kepler Club different from standard airport lounges?',
+        a: 'Kepler Club focuses on a premium food and comfort experience above what standard independent lounges offer. The brand targets travelers who want a noticeably higher quality environment for their layover.',
+      },
+      {
+        q: 'Are Kepler Club lounges airside?',
+        a: 'Yes. Kepler Club lounges are located airside at the airports they serve, so transit passengers can access them without clearing immigration.',
+      },
+      {
+        q: 'How much does Kepler Club cost?',
+        a: 'Kepler Club is priced per visit at the premium end of the independent lounge market. Rates vary by location — check the specific lounge listing for current pricing.',
+      },
+    ],
+    closingParagraph: 'For travelers who want a premium lounge experience without relying on airline status, Kepler Club offers a strong alternative to standard independent lounges. Browse all airport lounge options on RestInAirport, or compare transit hotels and sleep pods for rest-focused layover solutions.',
+  },
+  'wait-n-rest': {
+    overview: "Wait N' Rest is an airport sleep pod brand providing self-service rest capsules at select airports. The brand offers an affordable, accessible alternative to transit hotels for passengers who need a short rest during a layover. Pods are available by the hour with straightforward self-service access.",
+    coverage: "Wait N' Rest operates at a select number of airports. The brand focuses on providing accessible rest options at airports where dedicated sleep facilities are limited.",
+    verdict: "Wait N' Rest is a practical option for budget-conscious travelers who need a short rest and are transiting through an airport where the brand operates.",
+    bestFor: 'Budget travelers, short layovers, passengers wanting accessible rest without hotel pricing',
+    notIdealFor: 'Travelers needing full privacy, showers, or hotel amenities',
+    accessModel: 'Self-service, walk-in. No advance booking required at most locations. Hourly rate paid at the terminal.',
+    sleepFormat: 'Sleep pod format with basic rest facilities. Suitable for short layover rest of 1–4 hours.',
+    metaDescription: "Wait N' Rest airport sleep pods at select airports — self-service hourly rest capsules for budget travelers on short layovers.",
+    intro: "Wait N' Rest operates self-service sleep pods at select airports, providing affordable hourly rest for transit passengers. This guide covers Wait N' Rest locations, pricing, and access rules.",
+    faqs: [
+      {
+        q: "Where does Wait N' Rest operate?",
+        a: "Wait N' Rest operates at a select number of airports. Check the facility listings on RestInAirport for current terminal and airport availability.",
+      },
+      {
+        q: "How much does Wait N' Rest cost?",
+        a: "Wait N' Rest is priced by the hour. Rates vary by airport and are displayed at the pod terminal before payment.",
+      },
+      {
+        q: "Are Wait N' Rest pods airside?",
+        a: "Verify the specific location for your airport — most Wait N' Rest installations are positioned in the airside terminal area for transit passenger access.",
+      },
+    ],
+    closingParagraph: "Wait N' Rest provides a straightforward rest option for travelers on short layovers who want affordable pod access. Browse all sleep pod options on RestInAirport to compare with other available brands at your airport.",
+  },
+  'sh-premium-lounge': {
+    overview: 'SH Premium Lounge is an independent airport lounge brand offering paid lounge access at select airports. The lounge provides a comfortable alternative to the general departures hall, with food, beverages, and Wi-Fi included in the visit price. Access is open to all passengers regardless of airline or class of travel.',
+    coverage: 'SH Premium Lounge operates at a select number of international airports. The brand focuses on providing accessible premium lounge amenities at airports where independent lounge options are limited.',
+    verdict: 'SH Premium Lounge is a solid option for travelers at its served airports who want a comfortable, food-inclusive lounge environment without airline lounge access.',
+    bestFor: 'Passengers without airline lounge access, travelers wanting a comfortable waiting area with food included',
+    notIdealFor: 'Travelers at airports where SH Premium Lounge does not operate',
+    accessModel: 'Open to all passengers — paid per visit. No airline status required. Airside at served locations.',
+    sleepFormat: 'Lounge seating with rest areas. Food, beverages, and Wi-Fi included in the visit price.',
+    metaDescription: 'SH Premium Lounge independent airport lounge at select airports — open to all passengers, food and Wi-Fi included, paid per visit.',
+    intro: 'SH Premium Lounge operates independent airport lounges at select airports, open to all passengers via a paid visit fee. This guide covers SH Premium Lounge locations, amenities, and access rules.',
+    faqs: [
+      {
+        q: 'Who can access SH Premium Lounge?',
+        a: 'Any passenger can access SH Premium Lounge by paying the visit fee. No airline membership, loyalty points, or premium ticket is required.',
+      },
+      {
+        q: 'What is included in SH Premium Lounge access?',
+        a: 'SH Premium Lounge access typically includes food, beverages, Wi-Fi, and comfortable seating. Check the specific airport listing for full amenity details.',
+      },
+      {
+        q: 'Are SH Premium Lounge locations airside?',
+        a: 'Yes. SH Premium Lounge locations are positioned airside at the airports they serve, accessible without clearing immigration for transit passengers.',
+      },
+    ],
+    closingParagraph: 'SH Premium Lounge provides a comfortable lounge option for passengers at its served airports who want food and amenities during a layover. Browse all airport lounge options on RestInAirport to compare with other independent lounges on your route.',
+  },
+  'skyhub-lounge': {
+    overview: 'Skyhub Lounge is an independent airport lounge offering paid access to travelers at select airports. The lounge provides a comfortable rest and dining environment for passengers who want an alternative to the general departures hall. Access is open to all passengers with a visit fee.',
+    coverage: 'Skyhub Lounge operates at select airports, targeting travelers who need a comfortable paid lounge option. The brand provides independent lounge access at locations where dedicated rest facilities are otherwise limited.',
+    verdict: 'Skyhub Lounge is a practical choice for travelers at its served airports who want a comfortable, food-inclusive lounge without requiring airline or status access.',
+    bestFor: 'Passengers without airline lounge access, layovers requiring food and comfortable seating',
+    notIdealFor: 'Travelers at airports where Skyhub Lounge does not operate',
+    accessModel: 'Open to all passengers — paid per visit. Airside at served locations.',
+    sleepFormat: 'Lounge seating and rest areas. Food, beverages, and Wi-Fi included in the standard visit.',
+    metaDescription: 'Skyhub Lounge independent airport lounge at select airports — open to all passengers, food and Wi-Fi included, paid per visit.',
+    intro: 'Skyhub Lounge operates independent airport lounges at select airports, open to all passengers via paid entry. This guide covers Skyhub Lounge locations, amenities, and access rules.',
+    faqs: [
+      {
+        q: 'Who can access Skyhub Lounge?',
+        a: 'Any passenger can access Skyhub Lounge by paying the visit fee — no airline membership or frequent flyer status required.',
+      },
+      {
+        q: 'What does Skyhub Lounge include?',
+        a: 'Skyhub Lounge typically includes food, beverages, Wi-Fi, and comfortable seating in a quiet lounge environment. Check the specific airport listing for full details.',
+      },
+      {
+        q: 'Are Skyhub Lounge locations airside?',
+        a: 'Yes. Skyhub Lounge locations are positioned airside at the airports they serve, accessible without clearing immigration for transit passengers.',
+      },
+    ],
+    closingParagraph: 'Skyhub Lounge offers a straightforward lounge option for travelers who need food, Wi-Fi, and comfortable seating during a layover. Browse all airport lounge options on RestInAirport to compare independent lounge choices across your route.',
+  },
+  'sleepover': {
+    overview: 'Sleepover is an airport sleep pod brand providing self-service rest capsules at select international airports. Pods are available by the hour with a walk-in model — no advance booking needed. The brand provides an affordable alternative to transit hotels for passengers on short to medium layovers.',
+    coverage: 'Sleepover operates at select international airports. The brand targets airports where dedicated sleep pod options are limited, filling a gap for travelers who need affordable hourly rest.',
+    verdict: 'Sleepover is a useful option for budget-conscious travelers on short layovers at the airports where it operates, providing basic pod rest without hotel-level costs.',
+    bestFor: 'Short to medium layovers, budget travelers, passengers wanting walk-in pod access',
+    notIdealFor: 'Travelers needing full privacy, shower access, or extended overnight stays',
+    accessModel: 'Self-service walk-in. No advance booking required. Hourly rate paid at the terminal.',
+    sleepFormat: 'Sleep pod format with reclining or flat sleep surface. Basic privacy screening. Suitable for short rest of 1–4 hours.',
+    metaDescription: 'Sleepover airport sleep pods at select international airports — self-service hourly rest capsules for transit passengers, no booking required.',
+    intro: 'Sleepover operates self-service sleep pod capsules at select international airports, available by the hour with walk-in access. This guide covers Sleepover pod locations, pricing, and access rules.',
+    faqs: [
+      {
+        q: 'Where does Sleepover operate?',
+        a: 'Sleepover operates at select international airports. Check the facility listings on RestInAirport for current airport and terminal availability.',
+      },
+      {
+        q: 'Do Sleepover pods require a booking?',
+        a: 'No. Sleepover pods operate on a walk-in, self-service basis. Pay at the pod terminal for the hours you need.',
+      },
+      {
+        q: 'Are Sleepover pods airside?',
+        a: 'Sleepover pods are located in airside terminal areas at the airports they serve, so transit passengers can access them without clearing immigration.',
+      },
+      {
+        q: 'How much does Sleepover cost?',
+        a: 'Sleepover is priced by the hour with rates displayed at the pod terminal before payment. Pricing varies by airport.',
+      },
+    ],
+    closingParagraph: 'Sleepover provides a simple, accessible rest option for transit passengers on short layovers. Browse all sleep pod brands on RestInAirport to compare options, or explore transit hotels if you need more privacy and amenities for a longer stay.',
+  },
 };
 
 const COMPARISON_BRANDS: Record<string, string[]> = {
@@ -384,7 +576,7 @@ const COMPARISON_BRANDS: Record<string, string[]> = {
   'sleepover': ['gosleep', 'napcabs', 'zzzleepandgo', 'wait-n-rest', 'aerotel'],
 };
 
-const BRAND_NAME_MAP: Record<string, string> = {
+export const BRAND_NAME_MAP: Record<string, string> = {
   'aerotel': 'Aerotel',
   'gosleep': 'GoSleep',
   'yotelair': 'YOTELAIR',
@@ -423,6 +615,15 @@ function getRegionFromCodes(codes: string[]): string {
   return `${list.slice(0, -1).join(', ')}, and ${list[list.length - 1]}`;
 }
 
+export function getBrandData(brandSlug: string): BrandDescriptionData | null {
+  return BRAND_DESCRIPTIONS[brandSlug] || null;
+}
+
+export function isThinContentBrand(brandSlug: string): boolean {
+  const data = BRAND_DESCRIPTIONS[brandSlug];
+  return !data || (data.thinContent === true);
+}
+
 export function getBrandMetaDescription(
   brandName: string,
   brandType: BrandType,
@@ -440,7 +641,7 @@ export function getBrandMetaDescription(
     : 'airport rest facility';
 
   const regionText = region ? ` across ${region}` : '';
-  return `${brandName} operates as an airport ${typeLabel} at ${airportCount} ${airportCount === 1 ? 'airport' : 'airports'}${regionText}. View locations, access rules, pricing, and whether transit passengers can stay without clearing immigration.`;
+  return `${brandName} ${typeLabel} at ${airportCount} ${airportCount === 1 ? 'airport' : 'airports'}${regionText} — locations, pricing, and transit passenger access rules.`;
 }
 
 export function getBrandIntro(
@@ -493,7 +694,7 @@ function getGenericBrandFAQs(
   return [
     {
       q: `What is ${brandName}?`,
-      a: `${brandName} is an airport ${brandType === 'Transit Hotel' ? 'transit hotel' : brandType === 'Sleep Pods' ? 'sleep pod brand' : 'lounge network'} operating at ${airportCount} ${airportCount === 1 ? 'airport' : 'airports'} worldwide. It provides travelers with dedicated rest facilities within airport terminal buildings.`,
+      a: `${brandName} is an airport ${brandType === 'Transit Hotel' ? 'transit hotel' : brandType === 'Sleep Pods' ? 'sleep pod brand' : 'lounge network'} operating at ${airportCount} ${airportCount === 1 ? 'airport' : 'airports'}. It provides travelers with dedicated rest facilities within airport terminal buildings.`,
     },
     {
       q: `Can you sleep overnight at ${brandName}?`,
@@ -517,19 +718,7 @@ function getGenericBrandFAQs(
     },
     {
       q: `Can you use ${brandName} without a visa?`,
-      a: `In most cases, no visa is required to use ${brandName} because facilities are located in the airside area of the terminal, before immigration and customs. If you need to travel between terminals or access landside areas, visa requirements for the transit country apply.`,
-    },
-    {
-      q: `Does ${brandName} have showers?`,
-      a: brandType === 'Transit Hotel'
-        ? `Yes. ${brandName} transit hotel rooms include private en-suite shower facilities as a standard feature.`
-        : brandType === 'Sleep Pods'
-        ? `Shower access varies by ${brandName} location. Some airports include shower facilities alongside pod bookings; others offer shower access separately.`
-        : `${brandName} lounges typically include shower facilities, though availability may vary by location.`,
-    },
-    {
-      q: `How far in advance should I book ${brandName}?`,
-      a: `At major hub airports, booking at least 24–48 hours in advance is recommended, particularly during peak travel seasons. Some locations accept walk-ins when capacity is available.`,
+      a: `In most cases, no visa is required to use ${brandName} because facilities are located in the airside area of the terminal, before immigration and customs.`,
     },
   ];
 }
@@ -555,7 +744,7 @@ export function BrandSEOContent({
   const faqs = content?.faqs ?? getGenericBrandFAQs(brandName, brandType, airportCount);
 
   const overviewText = content?.overview ||
-    `${brandName} is an airport ${brandType === 'Mixed' ? 'rest and hospitality' : brandType.toLowerCase()} brand operating at ${airportCount} ${airportCount === 1 ? 'airport' : 'airports'} worldwide. The brand provides travelers with dedicated rest facilities within airport terminal buildings, offering an alternative to spending a layover in the general departures area.`;
+    `${brandName} is an airport ${brandType === 'Mixed' ? 'rest and hospitality' : brandType.toLowerCase()} brand operating at ${airportCount} ${airportCount === 1 ? 'airport' : 'airports'} worldwide. The brand provides travelers with dedicated rest facilities within airport terminal buildings.`;
 
   const coverageText = content?.coverage ||
     `${brandName} currently operates at ${airportCount} ${airportCount === 1 ? 'airport' : 'airports'} worldwide${region ? ` with a presence in ${region}` : ''}, with ${facilityCount} ${facilityCount === 1 ? 'facility' : 'facilities'} available to travelers.`;
@@ -564,7 +753,7 @@ export function BrandSEOContent({
     `${brandName} is a solid choice for travelers who need ${brandType === 'Transit Hotel' ? 'private accommodation during a layover' : brandType === 'Sleep Pods' ? 'affordable rest in a compact pod format' : 'lounge access and amenities during a wait'} at the airports where it operates.`;
 
   const closingParagraph = content?.closingParagraph ||
-    `${brandName} provides a practical rest solution for transit passengers at the airports it serves. Whether you need ${brandType === 'Transit Hotel' ? 'a private room and shower for a long layover' : brandType === 'Sleep Pods' ? 'affordable hourly pod access during a short connection' : 'lounge access with food and Wi-Fi before your next flight'}, ${brandName} covers the essentials. Browse all ${brandType === 'Transit Hotel' ? 'transit hotels' : brandType === 'Sleep Pods' ? 'sleep pods' : 'airport lounges'} on RestInAirport to compare options across airports, or explore all rest categories to find the right solution for your layover.`;
+    `${brandName} provides a practical rest solution for transit passengers at the airports it serves. Browse all ${brandType === 'Transit Hotel' ? 'transit hotels' : brandType === 'Sleep Pods' ? 'sleep pods' : 'airport lounges'} on RestInAirport to compare options, or explore all rest categories to find the right solution for your layover.`;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 space-y-14">
@@ -575,21 +764,36 @@ export function BrandSEOContent({
       </section>
 
       <section>
-        <h2 className="text-2xl font-bold text-slate-900 mb-4">Where You'll Find {brandName}</h2>
+        <h2 className="text-2xl font-bold text-slate-900 mb-4">{brandName} Coverage</h2>
         <p className="text-slate-600 leading-relaxed max-w-3xl">
           {coverageText}
           {airportCodes.length === 0 && ' Available in major international transit hubs — check individual listings for terminal details.'}
         </p>
       </section>
 
+      {(content?.accessModel || content?.sleepFormat) && (
+        <section>
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">How {brandName} Works</h2>
+          <div className="grid sm:grid-cols-2 gap-4 max-w-3xl">
+            {content?.accessModel && (
+              <div className="bg-white border border-slate-200 rounded-xl p-5">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Access Model</p>
+                <p className="text-slate-700 text-sm leading-relaxed">{content.accessModel}</p>
+              </div>
+            )}
+            {content?.sleepFormat && (
+              <div className="bg-white border border-slate-200 rounded-xl p-5">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Sleep Format</p>
+                <p className="text-slate-700 text-sm leading-relaxed">{content.sleepFormat}</p>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
       <section>
         <h2 className="text-2xl font-bold text-slate-900 mb-4">Is {brandName} Worth It?</h2>
-        <p className="text-slate-600 leading-relaxed max-w-3xl mb-5">
-          {verdictText}
-          {verdictText.toLowerCase().includes('visa') && (
-            <>{' '}<a href="https://www.visainfoguide.com" target="_blank" rel="noopener noreferrer" className="font-semibold text-sky-700 hover:text-sky-600 underline underline-offset-2">Check your transit visa requirements at visainfoguide.com</a>.</>
-          )}
-        </p>
+        <p className="text-slate-600 leading-relaxed max-w-3xl mb-5">{verdictText}</p>
         <div className="grid sm:grid-cols-2 gap-4 max-w-3xl">
           <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
             <p className="text-xs font-semibold text-emerald-700 uppercase tracking-wider mb-2">Best for</p>
