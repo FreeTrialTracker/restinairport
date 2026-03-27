@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Hotel, MapPin, Loader, ChevronDown } from 'lucide-react';
+import { Hotel, MapPin, Loader, ChevronDown, ShieldCheck, Clock, DollarSign, Lock, AlertCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { AirportFacility } from '../lib/database.types';
 import SearchResults from './SearchResults';
@@ -11,16 +11,46 @@ import { updatePageMeta, generateFAQStructuredData } from '../lib/seo';
 import { navigateTo } from '../lib/navigation';
 
 const SLEEP_PODS_FAQ = [
-  { question: 'Can you sleep in airport pods without a visa?', answer: 'Yes, if the pods are located airside within the transit zone, you do not need to pass immigration or hold a visa.' },
-  { question: 'How much do airport sleep pods cost?', answer: 'Most sleep pods cost between 10 and 40 USD per hour depending on the airport and amenities.' },
-  { question: 'Are sleep pods worth it?', answer: 'Yes, especially for short layovers. They offer privacy and comfort compared to sleeping in public areas.' },
-  { question: 'What is the difference between sleep pods and transit hotels?', answer: 'Sleep pods are compact and rented hourly, while transit hotels provide full private rooms for longer stays.' },
-  { question: 'Do airport sleep pods have showers?', answer: 'Some do, but many require separate access to airport shower facilities.' },
-  { question: 'Can you book sleep pods in advance?', answer: 'Yes, many airports allow online booking, but availability may be limited in busy hubs.' },
-  { question: 'Are airport sleep pods safe?', answer: 'Yes, they are located in secure airport areas with monitoring and staff nearby.' },
-  { question: 'Which airports have sleep pods?', answer: 'Major airports like Doha, Dubai, Helsinki, Tokyo, and Seoul offer sleep pod facilities.' },
-  { question: 'How long can you stay in a sleep pod?', answer: 'Most facilities allow hourly bookings, typically starting from 1 to 3 hours, with options to extend.' },
-  { question: 'Are sleep pods better than airport lounges?', answer: 'Yes for sleeping. Lounges are better for relaxing, but sleep pods provide more privacy and comfort for rest.' },
+  {
+    question: 'Are airport sleep pods airside or landside?',
+    answer: 'Most sleep pods in major international airports are located airside — inside the secure transit zone after security and passport control. This means transit passengers can use them without clearing immigration. A smaller number are landside, which requires exiting the airport and re-entering. Always check the specific facility listing before booking.',
+  },
+  {
+    question: 'Can I use a sleep pod without a transit visa?',
+    answer: 'Yes, if the pod is airside. Airside sleep pods are accessible to international transit passengers without needing to pass through immigration or hold a visa for the transit country. If the pod is landside, you would need to clear immigration, and transit visa rules would apply based on your nationality and the country you are transiting through.',
+  },
+  {
+    question: 'How much do airport sleep pods cost?',
+    answer: 'Pricing typically ranges from $10–$20 USD per hour for basic open-visor pods to $25–$50 per hour for fully enclosed premium capsules. Many facilities offer block bookings (3-hour, 6-hour) at a lower hourly rate. Overnight rates are available at some locations and usually offer better value than per-hour pricing.',
+  },
+  {
+    question: 'What is the difference between a sleep pod and a private room?',
+    answer: 'Sleep pods are compact, semi-private or fully enclosed capsules designed for short rest. They typically include a bed surface, charging ports, and sometimes a privacy visor or door. Private rooms are larger, fully enclosed spaces with a proper bed, and often a desk. Private rooms generally cost more and are better suited to layovers over 5 hours.',
+  },
+  {
+    question: 'Which airports have the best sleep pods?',
+    answer: 'Airports with well-established sleep pod options include Singapore Changi (SIN), Seoul Incheon (ICN), Helsinki Vantaa (HEL), Dubai (DXB), and Doha Hamad (DOH). Munich Airport (MUC) has Napcabs, a fully enclosed pod brand. Availability and quality vary significantly by terminal — check individual listings for terminal-level detail.',
+  },
+  {
+    question: 'Do airport sleep pods have showers?',
+    answer: 'Most sleep pod brands do not include en-suite showers. Some airports co-locate shower facilities alongside pod areas or offer paid showers nearby. If showering is important to you, check whether the specific facility has shower access or consider a private room or transit hotel, which typically include private bathrooms.',
+  },
+  {
+    question: 'Can you sleep overnight in a sleep pod?',
+    answer: 'Yes. Most sleep pod brands allow extended bookings that cover overnight hours. You book by the hour and can reserve as many hours as needed. Overnight stays are practical in fully enclosed pods like Napcabs. In open or visor-based pods, overnight sleep quality depends heavily on terminal noise levels.',
+  },
+  {
+    question: 'Are sleep pods better than airport lounges for sleeping?',
+    answer: 'Yes, for actual sleep. Airport lounges offer reclining chairs and quiet zones, but they are shared spaces with foot traffic, lighting, and noise. Sleep pods provide a dedicated, semi-private or fully enclosed space designed for rest. If your priority is sleep rather than food or Wi-Fi access, a pod delivers meaningfully better rest quality.',
+  },
+  {
+    question: 'Is it safe to leave luggage in a sleep pod?',
+    answer: 'Safety practices vary by brand. Many sleep pod facilities offer luggage storage lockers or secure hooks inside the pod. Fully enclosed pods with locking doors allow you to keep luggage inside while you sleep. Open-visor pod designs require more caution with valuables. Check the specific facility amenities before booking.',
+  },
+  {
+    question: 'How far in advance should I book a sleep pod?',
+    answer: 'At high-traffic hub airports like Singapore Changi, Seoul Incheon, and Doha, booking 24–48 hours in advance is recommended, especially during peak travel periods. Walk-in availability is possible but not guaranteed. Some pod brands operate on a walk-in only basis with no advance booking — check the facility page for booking policy.',
+  },
 ];
 
 export default function SleepPodsPage() {
@@ -32,8 +62,8 @@ export default function SleepPodsPage() {
   useEffect(() => {
     fetchFacilities();
     updatePageMeta(
-      'Sleep Pods in Airports Worldwide (2026 Guide) | RestInAirport.com',
-      'Discover airport sleep pods and capsule hotels at 100+ airports worldwide. Compare hourly rates, transit-safe locations, and amenities for efficient layover rest.',
+      'Airport Sleep Pods: Airside Locations, Prices & Transit Access (2026) | RestInAirport',
+      'Find sleep pods at 100+ airports worldwide. Compare airside vs landside access, hourly rates, privacy levels, and which pods work for transit passengers without a visa.',
       `${window.location.origin}/sleep-pods`,
       generateFAQStructuredData(SLEEP_PODS_FAQ)
     );
@@ -59,55 +89,80 @@ export default function SleepPodsPage() {
   const sleepPodFacilities = filteredFacilities;
   const airportCount = new Set(sleepPodFacilities.map(f => f.airport)).size;
 
-  const faqItems = SLEEP_PODS_FAQ;
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col">
       <Helmet>
-        <title>Sleep Pods in Airports Worldwide (2026 Guide) | RestInAirport.com</title>
-        <meta name="description" content="Discover airport sleep pods and capsule hotels at 100+ airports worldwide. Compare hourly rates, transit-safe locations, and amenities for efficient layover rest." />
+        <title>Airport Sleep Pods: Airside Locations, Prices & Transit Access (2026) | RestInAirport</title>
+        <meta name="description" content="Find sleep pods at 100+ airports worldwide. Compare airside vs landside access, hourly rates, privacy levels, and which pods work for transit passengers without a visa." />
         <link rel="canonical" href="https://restinairport.com/sleep-pods" />
-        <meta property="og:title" content="Sleep Pods in Airports Worldwide (2026 Guide) | RestInAirport.com" />
-        <meta property="og:description" content="Discover airport sleep pods and capsule hotels at 100+ airports worldwide. Compare hourly rates, transit-safe locations, and amenities." />
+        <meta property="og:title" content="Airport Sleep Pods: Airside Locations, Prices & Transit Access | RestInAirport" />
+        <meta property="og:description" content="Find sleep pods at 100+ airports. Compare airside vs landside access, hourly rates, and transit eligibility." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://restinairport.com/sleep-pods" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Sleep Pods in Airports Worldwide (2026 Guide) | RestInAirport.com" />
-        <meta name="twitter:description" content="Discover airport sleep pods and capsule hotels at 100+ airports worldwide." />
+        <meta name="twitter:title" content="Airport Sleep Pods: Airside Locations, Prices & Transit Access | RestInAirport" />
+        <meta name="twitter:description" content="Find sleep pods at 100+ airports. Compare access, pricing, and transit eligibility." />
       </Helmet>
       <Header />
 
       <main className="flex-1">
         <div className="bg-gradient-to-r from-slate-800 to-slate-700 text-white py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Sleep Pods in Airports Worldwide (2026 Guide)</h1>
+            <div className="mb-3">
+              <span className="inline-block text-xs font-semibold uppercase tracking-widest text-slate-300 bg-slate-700 px-3 py-1 rounded-full">
+                Category
+              </span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Sleep Pods in Airports</h1>
+            <p className="text-lg text-slate-200 max-w-3xl mb-8 leading-relaxed">
+              Compact, hourly-rate sleeping capsules located inside airport terminals. Most are airside — no immigration clearance required for international transit passengers.
+            </p>
 
-            <div className="flex flex-wrap gap-6 mt-8">
-              <div className="flex items-center space-x-2">
-                <Hotel className="w-6 h-6" />
-                <div>
-                  <div className="text-2xl font-bold">{sleepPodFacilities.length}</div>
-                  <div className="text-sm text-slate-300">Facilities</div>
-                </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+              <div className="bg-slate-700 rounded-xl px-4 py-3 text-center">
+                <div className="text-2xl font-bold">{sleepPodFacilities.length}</div>
+                <div className="text-xs text-slate-300 mt-0.5">Pod Facilities</div>
               </div>
-              <div className="flex items-center space-x-2">
-                <MapPin className="w-6 h-6" />
-                <div>
-                  <div className="text-2xl font-bold">{airportCount}</div>
-                  <div className="text-sm text-slate-300">Airports</div>
-                </div>
+              <div className="bg-slate-700 rounded-xl px-4 py-3 text-center">
+                <div className="text-2xl font-bold">{airportCount}</div>
+                <div className="text-xs text-slate-300 mt-0.5">Airports</div>
+              </div>
+              <div className="bg-slate-700 rounded-xl px-4 py-3 text-center">
+                <div className="text-sm font-bold">$10–$50</div>
+                <div className="text-xs text-slate-300 mt-0.5">Per Hour</div>
+              </div>
+              <div className="bg-slate-700 rounded-xl px-4 py-3 text-center">
+                <div className="text-sm font-bold">Mostly Airside</div>
+                <div className="text-xs text-slate-300 mt-0.5">Access Type</div>
               </div>
             </div>
           </div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="prose prose-slate max-w-none mb-12">
-            <p className="text-lg text-slate-700 leading-relaxed">
-              Sleep pods in airports are compact, private sleeping units located inside airport terminals, often in airside transit areas. Travelers can rest during layovers without{' '}
-              <a href="https://www.visainfoguide.com" target="_blank" rel="noopener noreferrer" className="font-semibold text-sky-700 hover:text-sky-600 underline underline-offset-2">passing immigration</a>,
-              making them ideal for short layovers. These pods are typically rented by the hour and include a bed, charging ports, and basic privacy features.
-            </p>
+
+          <div className="grid sm:grid-cols-3 gap-4 mb-10">
+            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <span className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">Best for</span>
+              </div>
+              <p className="text-sm text-slate-700 leading-relaxed">Layovers of 2–8 hours. Transit passengers who cannot clear immigration. Budget-conscious travelers who need real rest, not just a seat.</p>
+            </div>
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <AlertCircle className="w-4 h-4 text-amber-600" />
+                <span className="text-xs font-semibold text-amber-700 uppercase tracking-wider">Not ideal for</span>
+              </div>
+              <p className="text-sm text-slate-700 leading-relaxed">Overnight layovers over 10 hours. Travelers needing a shower or en-suite bathroom. Families or passengers with bulky luggage.</p>
+            </div>
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Lock className="w-4 h-4 text-slate-500" />
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Access note</span>
+              </div>
+              <p className="text-sm text-slate-700 leading-relaxed">Most sleep pods are airside. Transit passengers do not need to clear immigration. Confirm landside/airside status on each listing before booking.</p>
+            </div>
           </div>
 
           {loading ? (
@@ -117,357 +172,255 @@ export default function SleepPodsPage() {
             </div>
           ) : (
             <>
-              <FacilityFilters
-                facilities={facilities}
-                onFilterChange={setFilteredFacilities}
-              />
+              <FacilityFilters facilities={facilities} onFilterChange={setFilteredFacilities} />
               <SearchResults facilities={sleepPodFacilities} query="" />
             </>
           )}
 
-          <div className="mt-16 space-y-12">
-            <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Global Coverage</h2>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                This page focuses specifically on airport sleep pod and capsule-style facilities within a global dataset of 200+ airport rest facilities across 100+ airports worldwide.
-              </p>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                Sleep pod locations are available in major international hubs across Asia, the Middle East, Europe, and North America. You can explore all airports directly via the{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/airports'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  airports
-                </a>{' '}
-                page or drill into specific locations through each listing.
-              </p>
-              <p className="text-slate-700 leading-relaxed">
-                Each facility listing includes terminal-level location, access rules, pricing estimates, and whether the pod is transit-safe without immigration.
-              </p>
-            </section>
+          <div className="mt-16 space-y-14">
 
             <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">What Are Airport Sleep Pods?</h2>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">What Are Airport Sleep Pods?</h2>
               <p className="text-slate-700 leading-relaxed mb-4">
-                Airport sleep pods (also known as capsule pods or nap pods) are compact, enclosed sleeping units designed for short-term rest inside airport terminals.
+                Airport sleep pods are compact, enclosed or semi-enclosed sleeping units inside terminal buildings, available by the hour. They range from open-design recliner pods with a privacy visor (like GoSleep) to fully enclosed lockable capsules (like Napcabs at Munich). The quality of privacy and sound insulation varies significantly between brands.
               </p>
               <p className="text-slate-700 leading-relaxed mb-4">
-                They are optimized for quick recovery during layovers and are often located near gates or inside transit zones. Unlike full rooms listed on{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/private-rooms'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  private rooms
-                </a>{' '}
-                or longer-stay options on{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  transit hotels
-                </a>, sleep pods focus on efficiency and accessibility.
+                Most include a flat or reclining sleep surface, charging ports, Wi-Fi, and controlled lighting. Shower access is not standard — check the individual listing if that matters to you.
               </p>
               <p className="text-slate-700 leading-relaxed">
-                Typical features include a reclining or flat sleeping surface, power outlets, adjustable lighting, and a compact enclosed design for privacy.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Who Should Use Sleep Pods?</h2>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                Sleep pods are ideal for travelers with layovers between 2 to 8 hours, especially those who cannot pass immigration.
-              </p>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                They are commonly used by solo travelers, transit passengers, and budget-conscious travelers who want better rest than public seating but do not need a full room like those listed under{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/private-rooms'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  private rooms
-                </a>{' '}
+                For layovers under 8 hours where you need actual rest — not just a seat — a sleep pod is usually the most efficient option available at most airports. For longer stays or overnight layovers, consider{' '}
+                <a href="/private-rooms" onClick={(e) => { e.preventDefault(); navigateTo('/private-rooms'); }} className="font-semibold text-slate-900 hover:text-sky-600 underline underline-offset-2">private rooms</a>{' '}
                 or{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  transit hotels
-                </a>.
-              </p>
-              <p className="text-slate-700 leading-relaxed">
-                If your goal is quick rest during transit, sleep pods are usually the best option.
+                <a href="/transit-hotels" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600 underline underline-offset-2">transit hotels</a>.
               </p>
             </section>
 
             <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Can You Use Sleep Pods Without a Visa?</h2>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                In many airports, yes.
-              </p>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                Most sleep pods are located airside, meaning inside the secure transit zone. This allows travelers to rest without passing immigration or needing a visa.
-              </p>
-              <p className="text-slate-700 leading-relaxed">
-                However, some facilities may be located landside or require{' '}
-                <a href="https://www.visainfoguide.com" target="_blank" rel="noopener noreferrer" className="font-semibold text-sky-700 hover:text-sky-600 underline underline-offset-2">entry clearance</a>.
-                Always check the facility details before booking or compare with options under{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  transit hotels
-                </a>{' '}
-                if you plan to enter the country.
-              </p>
-
-              <div className="mt-6 bg-sky-50 border border-sky-200 rounded-xl p-5 flex gap-4 items-start">
-                <div className="flex-shrink-0 w-10 h-10 bg-sky-100 rounded-full flex items-center justify-center">
-                  <svg className="w-5 h-5 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">Airside vs Landside: What It Means for Transit Passengers</h2>
+              <div className="grid sm:grid-cols-2 gap-4 max-w-3xl mb-5">
+                <div className="bg-white border border-slate-200 rounded-xl p-5">
+                  <p className="text-sm font-semibold text-slate-800 mb-2">Airside Sleep Pods</p>
+                  <p className="text-sm text-slate-600 leading-relaxed">Located inside the secure zone after passport control. International transit passengers can access them without clearing immigration. No transit visa is needed for the host country. This is the most common setup for sleep pods.</p>
+                </div>
+                <div className="bg-white border border-slate-200 rounded-xl p-5">
+                  <p className="text-sm font-semibold text-slate-800 mb-2">Landside Sleep Pods</p>
+                  <p className="text-sm text-slate-600 leading-relaxed">Located outside the secure zone, before passport control or in the arrivals area. Using these requires clearing immigration. Passengers without a valid visa or transit permit for the host country may not be able to use landside facilities.</p>
+                </div>
+              </div>
+              <div className="bg-sky-50 border border-sky-200 rounded-xl p-5 flex gap-4 items-start max-w-3xl">
+                <div className="flex-shrink-0 w-9 h-9 bg-sky-100 rounded-full flex items-center justify-center">
+                  <ShieldCheck className="w-5 h-5 text-sky-600" />
                 </div>
                 <div>
                   <p className="font-semibold text-sky-900 mb-1">Not sure if you need a transit visa?</p>
                   <p className="text-sky-800 text-sm leading-relaxed">
-                    Visa rules vary by nationality and transit country.{' '}
+                    Transit visa rules depend on your nationality and the country you are connecting through.{' '}
                     <a href="https://www.visainfoguide.com" target="_blank" rel="noopener noreferrer" className="font-semibold underline underline-offset-2 hover:text-sky-600">
-                      Check your transit visa eligibility at visainfoguide.com
-                    </a>
-                    {' '}before booking a landside facility.
+                      Check your transit visa requirements at visainfoguide.com
+                    </a>{' '}
+                    before booking a landside facility.
                   </p>
                 </div>
               </div>
             </section>
 
             <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Sleep Pods vs Other Airport Sleep Options</h2>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">Sleep Pods vs Other Airport Rest Options</h2>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm border-collapse max-w-4xl">
+                  <thead>
+                    <tr className="bg-slate-100 text-left">
+                      <th className="px-4 py-3 font-semibold text-slate-700 rounded-tl-lg">Option</th>
+                      <th className="px-4 py-3 font-semibold text-slate-700">Privacy</th>
+                      <th className="px-4 py-3 font-semibold text-slate-700">Best layover</th>
+                      <th className="px-4 py-3 font-semibold text-slate-700">Typical cost</th>
+                      <th className="px-4 py-3 font-semibold text-slate-700 rounded-tr-lg">Shower</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    <tr className="bg-slate-700 text-white">
+                      <td className="px-4 py-3 font-semibold">Sleep Pods</td>
+                      <td className="px-4 py-3">Semi-private to fully enclosed</td>
+                      <td className="px-4 py-3">2–8 hours</td>
+                      <td className="px-4 py-3">$10–$50/hr</td>
+                      <td className="px-4 py-3">Usually separate</td>
+                    </tr>
+                    <tr className="bg-white">
+                      <td className="px-4 py-3">
+                        <a href="/lounge-sleep" onClick={(e) => { e.preventDefault(); navigateTo('/lounge-sleep'); }} className="font-medium text-slate-800 hover:text-sky-600 underline underline-offset-2">Lounge Sleep</a>
+                      </td>
+                      <td className="px-4 py-3 text-slate-600">Shared seating</td>
+                      <td className="px-4 py-3 text-slate-600">Under 4 hours</td>
+                      <td className="px-4 py-3 text-slate-600">$30–$70/visit</td>
+                      <td className="px-4 py-3 text-slate-600">Often included</td>
+                    </tr>
+                    <tr className="bg-slate-50">
+                      <td className="px-4 py-3">
+                        <a href="/private-rooms" onClick={(e) => { e.preventDefault(); navigateTo('/private-rooms'); }} className="font-medium text-slate-800 hover:text-sky-600 underline underline-offset-2">Private Rooms</a>
+                      </td>
+                      <td className="px-4 py-3 text-slate-600">Fully private</td>
+                      <td className="px-4 py-3 text-slate-600">3–10 hours</td>
+                      <td className="px-4 py-3 text-slate-600">$40–$80/hr</td>
+                      <td className="px-4 py-3 text-slate-600">Often included</td>
+                    </tr>
+                    <tr className="bg-white">
+                      <td className="px-4 py-3">
+                        <a href="/transit-hotels" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-medium text-slate-800 hover:text-sky-600 underline underline-offset-2">Transit Hotels</a>
+                      </td>
+                      <td className="px-4 py-3 text-slate-600">Full hotel room</td>
+                      <td className="px-4 py-3 text-slate-600">6–16+ hours</td>
+                      <td className="px-4 py-3 text-slate-600">$80–$250/night</td>
+                      <td className="px-4 py-3 text-slate-600">Private en-suite</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
 
-              <div className="space-y-4">
-                <div className="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">Sleep Pods</h3>
-                  <p className="text-slate-700 leading-relaxed">
-                    Best for short rest between 1 to 6 hours. They are compact, affordable, and accessible inside terminals.
-                  </p>
+            <section>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">Best Airports for Sleep Pods</h2>
+              <p className="text-slate-700 leading-relaxed mb-4">
+                The strongest sleep pod coverage is at high-volume Asian and European transit hubs. Key airports include:
+              </p>
+              <ul className="space-y-2 text-slate-700 mb-4">
+                <li className="flex items-start gap-2"><a href="/airport/singapore-changi-sin" onClick={(e) => { e.preventDefault(); navigateTo('/airport/singapore-changi-sin'); }} className="font-semibold min-w-fit hover:text-sky-600 hover:underline">Singapore Changi (SIN)</a> — Aerotel and multiple pod brands across terminals, all airside</li>
+                <li className="flex items-start gap-2"><a href="/airport/seoul-incheon-icn" onClick={(e) => { e.preventDefault(); navigateTo('/airport/seoul-incheon-icn'); }} className="font-semibold min-w-fit hover:text-sky-600 hover:underline">Seoul Incheon (ICN)</a> — Capsule-style pods in both T1 and T2, no immigration needed</li>
+                <li className="flex items-start gap-2"><a href="/airport/munich-muc" onClick={(e) => { e.preventDefault(); navigateTo('/airport/munich-muc'); }} className="font-semibold min-w-fit hover:text-sky-600 hover:underline">Munich (MUC)</a> — Napcabs fully enclosed pods in T1 and T2, airside</li>
+                <li className="flex items-start gap-2"><a href="/airport/helsinki-vantaa-hel" onClick={(e) => { e.preventDefault(); navigateTo('/airport/helsinki-vantaa-hel'); }} className="font-semibold min-w-fit hover:text-sky-600 hover:underline">Helsinki Vantaa (HEL)</a> — GoSleep pods, transit-safe in departures</li>
+                <li className="flex items-start gap-2"><a href="/airport/hamad-international-airport-doh" onClick={(e) => { e.preventDefault(); navigateTo('/airport/hamad-international-airport-doh'); }} className="font-semibold min-w-fit hover:text-sky-600 hover:underline">Doha Hamad (DOH)</a> — Multiple rest facilities in the main terminal</li>
+              </ul>
+              <p className="text-slate-700 leading-relaxed">
+                Browse all sleep pod locations above, or explore all airports with rest facilities on the{' '}
+                <a href="/airports" onClick={(e) => { e.preventDefault(); navigateTo('/airports'); }} className="font-semibold text-slate-900 hover:text-sky-600 underline underline-offset-2">airports page</a>.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">How to Choose the Right Rest Option</h2>
+              <div className="space-y-3 max-w-2xl">
+                <div className="flex items-start gap-3 bg-white border border-slate-200 rounded-xl p-4">
+                  <Clock className="w-5 h-5 text-slate-500 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-slate-800 text-sm">Layover under 3 hours</p>
+                    <p className="text-sm text-slate-600">A lounge or quiet zone is usually sufficient. The cost of booking a pod may not be worth it for very short connections.</p>
+                  </div>
                 </div>
-
-                <div className="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">
-                    <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/private-rooms'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                      Private Rooms
-                    </a>
-                  </h3>
-                  <p className="text-slate-700 leading-relaxed">
-                    Better for longer rest or work sessions, offering more space and privacy.
-                  </p>
+                <div className="flex items-start gap-3 bg-slate-700 text-white rounded-xl p-4">
+                  <Clock className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-sm">Layover 3–8 hours</p>
+                    <p className="text-sm text-slate-200">Sleep pods are the best option. They deliver real rest at a lower price than private rooms, with airside access at most airports.</p>
+                  </div>
                 </div>
-
-                <div className="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">
-                    <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                      Transit Hotels
-                    </a>
-                  </h3>
-                  <p className="text-slate-700 leading-relaxed">
-                    Best for overnight stays or long layovers, with full hotel-style rooms.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">
-                    <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/lounge-sleep'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                      Lounge Sleep
-                    </a>
-                  </h3>
-                  <p className="text-slate-700 leading-relaxed">
-                    Suitable for light rest only, typically without beds.
-                  </p>
+                <div className="flex items-start gap-3 bg-white border border-slate-200 rounded-xl p-4">
+                  <Clock className="w-5 h-5 text-slate-500 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-slate-800 text-sm">Layover 8+ hours or overnight</p>
+                    <p className="text-sm text-slate-600">
+                      Consider a <a href="/private-rooms" onClick={(e) => { e.preventDefault(); navigateTo('/private-rooms'); }} className="font-semibold text-slate-900 hover:text-sky-600">private room</a> or <a href="/transit-hotels" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600">transit hotel</a> for better sleep quality, a proper bed, and shower access.
+                    </p>
+                  </div>
                 </div>
               </div>
-
-              <p className="text-slate-700 leading-relaxed mt-4">
-                For most short layovers, sleep pods offer the best balance between cost, access, and privacy.
-              </p>
             </section>
 
             <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">How Much Do Airport Sleep Pods Cost?</h2>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                Pricing varies depending on the airport and facility, but typical ranges are:
-              </p>
-              <ul className="list-disc pl-6 space-y-2 text-slate-700 mb-4">
-                <li>10 to 20 USD per hour for basic pods</li>
-                <li>25 to 40 USD per hour for premium pods</li>
-                <li>Higher rates for extended packages</li>
-              </ul>
-              <p className="text-slate-700 leading-relaxed">
-                Many facilities offer fixed booking durations such as 3-hour or 6-hour blocks.
-              </p>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">Pricing: What to Expect</h2>
+              <div className="grid sm:grid-cols-3 gap-4 max-w-3xl mb-4">
+                <div className="bg-white border border-slate-200 rounded-xl p-4 text-center">
+                  <DollarSign className="w-6 h-6 text-slate-500 mx-auto mb-2" />
+                  <p className="text-sm font-semibold text-slate-800">Basic pods</p>
+                  <p className="text-xl font-bold text-slate-900 my-1">$10–$20</p>
+                  <p className="text-xs text-slate-500">per hour — open-visor or recliner style, shared pod area</p>
+                </div>
+                <div className="bg-white border border-slate-200 rounded-xl p-4 text-center">
+                  <DollarSign className="w-6 h-6 text-slate-500 mx-auto mb-2" />
+                  <p className="text-sm font-semibold text-slate-800">Premium pods</p>
+                  <p className="text-xl font-bold text-slate-900 my-1">$25–$50</p>
+                  <p className="text-xs text-slate-500">per hour — fully enclosed, lockable capsule with climate control</p>
+                </div>
+                <div className="bg-white border border-slate-200 rounded-xl p-4 text-center">
+                  <DollarSign className="w-6 h-6 text-slate-500 mx-auto mb-2" />
+                  <p className="text-sm font-semibold text-slate-800">Block bookings</p>
+                  <p className="text-xl font-bold text-slate-900 my-1">$60–$120</p>
+                  <p className="text-xs text-slate-500">typical 6-hour block — better hourly value than per-hour pricing</p>
+                </div>
+              </div>
+              <p className="text-sm text-slate-500">Rates vary by airport, brand, and time of day. Check the individual facility listing for current pricing.</p>
             </section>
 
             <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Best Airports for Sleep Pods</h2>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                Major airports with strong sleep pod availability include Doha, Dubai, Helsinki, Tokyo Narita, and Seoul Incheon.
-              </p>
-              <p className="text-slate-700 leading-relaxed">
-                You can explore all supported airports through the{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/airports'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  airports
-                </a>{' '}
-                page or navigate directly via each listing above.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">When Should You Use a Sleep Pod?</h2>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                Sleep pods are best when your layover is under 8 hours and you need privacy without leaving the airport.
-              </p>
-              <p className="text-slate-700 leading-relaxed">
-                If your layover exceeds 8 to 10 hours, consider upgrading to a{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  transit hotel
-                </a>{' '}
-                or a{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/private-rooms'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  private room
-                </a>{' '}
-                for better comfort.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Tips for Booking Sleep Pods</h2>
-              <ul className="list-disc pl-6 space-y-2 text-slate-700">
-                <li>Always confirm whether the pod is airside or landside.</li>
-                <li>Book early in major hubs where availability is limited.</li>
-                <li>Check terminal and gate proximity before arrival.</li>
-                <li>Bring essentials as pods are minimal.</li>
-              </ul>
-            </section>
-
-            <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">How to Choose the Right Sleep Option</h2>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                For short layovers under 4 hours,{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/lounge-sleep'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  lounges
-                </a>{' '}
-                may be sufficient.
-              </p>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                For 4 to 8 hours, sleep pods are the most efficient option.
-              </p>
-              <p className="text-slate-700 leading-relaxed">
-                For longer layovers, transit hotels or private rooms provide better comfort and space.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Frequently Asked Questions</h2>
-              <div className="space-y-3">
-                {faqItems.map((item, index) => (
-                  <div key={index} className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+              <h2 className="text-2xl font-bold text-slate-900 mb-5">Frequently Asked Questions</h2>
+              <div className="border border-slate-200 rounded-xl overflow-hidden divide-y divide-slate-200 max-w-3xl">
+                {SLEEP_PODS_FAQ.map((item, index) => (
+                  <div key={index}>
                     <button
                       onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
-                      className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-slate-50 transition-colors"
+                      className="w-full px-5 py-4 text-left flex items-center justify-between bg-white hover:bg-slate-50 transition-colors"
+                      aria-expanded={openFaqIndex === index}
                     >
-                      <h3 className="text-lg font-semibold text-slate-900">{item.question}</h3>
-                      <ChevronDown
-                        className={`w-5 h-5 text-slate-600 transition-transform ${
-                          openFaqIndex === index ? 'rotate-180' : ''
-                        }`}
-                      />
+                      <span className="font-medium text-slate-800 pr-4">{item.question}</span>
+                      <ChevronDown className={`w-5 h-5 text-slate-400 flex-shrink-0 transition-transform duration-200 ${openFaqIndex === index ? 'rotate-180' : ''}`} />
                     </button>
-                    {openFaqIndex === index && (
-                      <div className="px-6 pb-4">
-                        <p className="text-slate-700 leading-relaxed">{item.answer}</p>
+                    <div className={`overflow-hidden transition-all duration-200 ${openFaqIndex === index ? 'max-h-64' : 'max-h-0'}`}>
+                      <div className="px-5 pb-5 bg-white">
+                        <p className="text-slate-600 leading-relaxed text-sm">{item.answer}</p>
                       </div>
-                    )}
+                    </div>
+                    <noscript>
+                      <div className="px-5 pb-5 bg-white">
+                        <p className="text-slate-600 leading-relaxed text-sm">{item.answer}</p>
+                      </div>
+                    </noscript>
                   </div>
                 ))}
               </div>
             </section>
 
-            <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Final Thoughts on Sleep Pods in Airports</h2>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                Sleep pods have become one of the most efficient ways to rest during a layover without leaving the airport. They offer a balance between affordability, privacy, and accessibility, especially for travelers who need quick recovery between flights.
-              </p>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                For short layovers, sleep pods are often the best option available. They provide significantly more comfort than public seating and better accessibility than full hotel rooms. However, they are not designed for long stays or deep sleep.
-              </p>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                If your travel situation changes, it is important to choose the right alternative. Travelers with longer layovers may benefit more from{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  transit hotels
-                </a>, while those needing additional comfort and space should consider{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/private-rooms'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  private rooms
-                </a>. For very short stays or access to food and facilities,{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/lounge-sleep'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  lounge sleep
-                </a>{' '}
-                may be sufficient.
-              </p>
-              <p className="text-slate-700 leading-relaxed">
-                The key is to match your layover duration, budget, and comfort level with the right option.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Explore Other Airport Sleep Options</h2>
-              <div className="grid md:grid-cols-3 gap-6 mb-8">
-                <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow">
-                  <h3 className="text-xl font-bold text-slate-900 mb-3">Transit Hotels in Airports</h3>
-                  <p className="text-slate-700 leading-relaxed mb-4">
-                    Full hotel rooms inside airport terminals for overnight stays and maximum comfort. Best for long layovers and proper sleep.
-                  </p>
-                  <button
-                    onClick={() => navigateTo('/transit-hotels')}
-                    className="w-full bg-slate-800 hover:bg-slate-900 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-                  >
-                    Explore Transit Hotels
-                  </button>
-                </div>
-
-                <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow">
-                  <h3 className="text-xl font-bold text-slate-900 mb-3">Private Rooms in Airports</h3>
-                  <p className="text-slate-700 leading-relaxed mb-4">
-                    Quiet, enclosed rooms offering more space and privacy than pods. Ideal for medium-length layovers and business travelers.
-                  </p>
-                  <button
-                    onClick={() => navigateTo('/private-rooms')}
-                    className="w-full bg-slate-800 hover:bg-slate-900 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-                  >
-                    Explore Private Rooms
-                  </button>
-                </div>
-
-                <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow">
-                  <h3 className="text-xl font-bold text-slate-900 mb-3">Lounge Sleep Options</h3>
-                  <p className="text-slate-700 leading-relaxed mb-4">
-                    Rest in airport lounges with comfortable seating, food, and WiFi. Suitable for short layovers and light rest.
-                  </p>
-                  <button
-                    onClick={() => navigateTo('/lounge-sleep')}
-                    className="w-full bg-slate-800 hover:bg-slate-900 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-                  >
-                    Explore Lounge Sleep
-                  </button>
-                </div>
+            <section className="border-t border-slate-200 pt-10">
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">Sleep Pods in Airports: Bottom Line</h2>
+              <div className="max-w-3xl space-y-3 text-slate-600 leading-relaxed">
+                <p>
+                  Sleep pods are the most practical mid-layover rest option at most major international airports. For transit passengers on a 3–8 hour connection, a sleep pod delivers real rest at a lower price than a private room, without requiring immigration clearance at airside locations.
+                </p>
+                <p>
+                  The category spans a wide range — from basic recliner pods with a visor to fully enclosed lockable capsules. At airports with strong pod coverage like Singapore Changi, Seoul Incheon, or Munich, quality options are available that genuinely rival the rest quality of a private room at a fraction of the cost.
+                </p>
+                <p>
+                  For overnight layovers or those needing shower access, upgrade to a{' '}
+                  <a href="/private-rooms" onClick={(e) => { e.preventDefault(); navigateTo('/private-rooms'); }} className="font-semibold text-slate-800 underline underline-offset-2 hover:text-slate-600">private room</a>{' '}
+                  or{' '}
+                  <a href="/transit-hotels" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-800 underline underline-offset-2 hover:text-slate-600">transit hotel</a>.
+                  For very short connections, a{' '}
+                  <a href="/lounge-sleep" onClick={(e) => { e.preventDefault(); navigateTo('/lounge-sleep'); }} className="font-semibold text-slate-800 underline underline-offset-2 hover:text-slate-600">lounge</a>{' '}
+                  may be more efficient. Browse all{' '}
+                  <a href="/airports" onClick={(e) => { e.preventDefault(); navigateTo('/airports'); }} className="font-semibold text-slate-800 underline underline-offset-2 hover:text-slate-600">airports</a>{' '}
+                  to find sleep pod availability on your specific route.
+                </p>
               </div>
             </section>
 
             <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Choosing the Best Airport Sleep Option</h2>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                Choosing the right airport sleep solution depends on your layover duration and comfort needs.
-              </p>
-              <ul className="list-disc pl-6 space-y-2 text-slate-700 mb-4">
-                <li>
-                  For short layovers under 4 hours,{' '}
-                  <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/lounge-sleep'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                    lounge sleep
-                  </a>{' '}
-                  is often enough
-                </li>
-                <li>For 4 to 8 hours, sleep pods provide the best balance</li>
-                <li>
-                  For 8+ hours,{' '}
-                  <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/private-rooms'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                    private rooms
-                  </a>{' '}
-                  or{' '}
-                  <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                    transit hotels
-                  </a>{' '}
-                  are more suitable
-                </li>
-              </ul>
-              <p className="text-slate-700 leading-relaxed">
-                Each option serves a different purpose, and understanding the difference will help you maximize comfort during your journey.
-              </p>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">Explore Other Airport Rest Options</h2>
+              <div className="grid sm:grid-cols-3 gap-4 max-w-3xl">
+                <a href="/private-rooms" onClick={(e) => { e.preventDefault(); navigateTo('/private-rooms'); }} className="bg-white border border-slate-200 rounded-xl p-5 hover:border-slate-300 hover:shadow-sm transition-all group">
+                  <Hotel className="w-6 h-6 text-slate-600 mb-3" />
+                  <p className="font-semibold text-slate-800 mb-1 group-hover:text-slate-600">Private Rooms</p>
+                  <p className="text-sm text-slate-500">Fully enclosed hourly rooms with beds and often bathrooms. Best for 4–10 hour layovers.</p>
+                </a>
+                <a href="/transit-hotels" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="bg-white border border-slate-200 rounded-xl p-5 hover:border-slate-300 hover:shadow-sm transition-all group">
+                  <MapPin className="w-6 h-6 text-slate-600 mb-3" />
+                  <p className="font-semibold text-slate-800 mb-1 group-hover:text-slate-600">Transit Hotels</p>
+                  <p className="text-sm text-slate-500">Full hotel rooms inside or connected to terminals. Best for overnight stays and long layovers.</p>
+                </a>
+                <a href="/lounge-sleep" onClick={(e) => { e.preventDefault(); navigateTo('/lounge-sleep'); }} className="bg-white border border-slate-200 rounded-xl p-5 hover:border-slate-300 hover:shadow-sm transition-all group">
+                  <Hotel className="w-6 h-6 text-slate-600 mb-3" />
+                  <p className="font-semibold text-slate-800 mb-1 group-hover:text-slate-600">Lounge Sleep</p>
+                  <p className="text-sm text-slate-500">Shared rest areas inside airport lounges. Best for short layovers and travelers with lounge access.</p>
+                </a>
+              </div>
             </section>
+
           </div>
         </div>
       </main>

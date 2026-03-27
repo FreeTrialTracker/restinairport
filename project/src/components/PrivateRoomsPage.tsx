@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Hotel, MapPin, Loader, ChevronDown } from 'lucide-react';
+import { Hotel, MapPin, Loader, ChevronDown, ShieldCheck, Clock, DollarSign, AlertCircle, Lock } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { AirportFacility } from '../lib/database.types';
 import SearchResults from './SearchResults';
@@ -11,16 +11,46 @@ import { updatePageMeta, generateFAQStructuredData } from '../lib/seo';
 import { navigateTo } from '../lib/navigation';
 
 const PRIVATE_ROOMS_FAQ = [
-  { question: 'Can you rent a private room in an airport?', answer: 'Yes, many airports offer private rooms through dedicated facilities or transit services, usually available on an hourly basis.' },
-  { question: 'Do airport private rooms require a visa?', answer: 'It depends on location. Airside rooms do not require a visa, while landside rooms do.' },
-  { question: 'How much do airport private rooms cost?', answer: 'Most private rooms cost between 40 and 80 USD per hour depending on the airport and amenities.' },
-  { question: 'Are private rooms better than sleep pods?', answer: 'Yes, they offer more space, privacy, and comfort compared to sleep pods, but at a higher cost.' },
-  { question: 'Can you sleep overnight in airport private rooms?', answer: 'Some allow extended stays, but transit hotels are usually better for full overnight rest.' },
-  { question: 'Do private rooms include showers?', answer: 'Some premium options include showers, while others may require separate facilities.' },
-  { question: 'Can you book private rooms in advance?', answer: 'Yes, many providers allow online booking, though availability can be limited.' },
-  { question: 'Are airport private rooms safe?', answer: 'Yes, they are located in secure airport areas with controlled access.' },
-  { question: 'What is the difference between private rooms and transit hotels?', answer: 'Private rooms are usually smaller and rented hourly, while transit hotels offer full hotel rooms.' },
-  { question: 'Which airports have private rooms?', answer: 'Airports like Atlanta, Dallas, Miami, and Charlotte offer private room facilities.' },
+  {
+    question: 'What is an airport private room?',
+    answer: 'An airport private room is a fully enclosed, lockable room inside or connected to an airport terminal, available for hourly or short-stay rental. Private rooms are larger than sleep pods and typically include a proper bed, desk, and often an en-suite bathroom. They are designed for transit passengers who need genuine privacy and a real rest space during a layover, without the full hotel booking process.',
+  },
+  {
+    question: 'Are airport private rooms airside or landside?',
+    answer: 'Most airport private rooms at major international hubs are located airside — inside the secure terminal zone after passport control. Transit passengers can access them without clearing immigration. Some facilities are landside or require crossing between terminal zones — verify the specific location before booking.',
+  },
+  {
+    question: 'Do I need a visa to use a private room at an airport?',
+    answer: 'For airside private rooms, no. Airside facilities are accessible without clearing immigration, so no visa for the transit country is required. For landside private rooms, you must pass through immigration, which may require a transit visa or entry permission depending on your nationality and the host country.',
+  },
+  {
+    question: 'How much does an airport private room cost?',
+    answer: 'Typical pricing runs $40–$80 per hour, or $120–$200 for a full daytime stay. Some brands like Minute Suites offer hourly rates starting from $45; transit hotel brands like YOTELAIR and Aerotel offer comparable private rooms at $80–$200+ depending on the airport. Pricing varies significantly by location and time of day.',
+  },
+  {
+    question: 'What is the difference between a private room and a transit hotel?',
+    answer: 'Private rooms are self-contained hourly-rate rest spaces — smaller than a hotel room, focused on sleep and privacy, with a streamlined booking process. Transit hotels are full hotel-style properties with hotel services, check-in desks, minimum stays of 4–8 hours, and typically a higher price. For layovers of 3–6 hours, a private room usually offers better value than a transit hotel.',
+  },
+  {
+    question: 'What is the difference between a private room and a sleep pod?',
+    answer: 'Private rooms are larger, fully enclosed with a lockable door, and typically include a proper flat bed rather than a reclining sleep surface. Sleep pods are compact capsules — some fully enclosed, some with only a partial privacy visor. Private rooms are better suited to layovers of 4+ hours where you need full privacy and a proper lying-flat sleep position.',
+  },
+  {
+    question: 'Do airport private rooms have showers?',
+    answer: 'It depends on the facility. Some private room brands include en-suite shower facilities; others provide shared shower access as an add-on. Minute Suites at US airports offer showers at select locations. YOTELAIR cabins include en-suite rainfall showers. Check the individual listing for the specific facility you are considering.',
+  },
+  {
+    question: 'Can families use airport private rooms?',
+    answer: 'Yes. Private rooms are more suitable for families than sleep pods, as the enclosed space with a proper door allows parents to manage children without disturbing other passengers. Check room occupancy limits before booking — most private rooms accommodate 1–2 adults and can include a child with some brands.',
+  },
+  {
+    question: 'How far in advance should I book an airport private room?',
+    answer: 'At high-traffic hub airports, booking 24–48 hours in advance is advisable. Walk-in availability exists at many locations but cannot be relied upon at popular hubs during peak travel periods. At US airports with Minute Suites, walk-in access is commonly available.',
+  },
+  {
+    question: 'Which airports have private rooms for transit passengers?',
+    answer: 'Private room options are available at Singapore Changi (Aerotel), London Heathrow (Aerotel, YOTELAIR), Amsterdam Schiphol (YOTELAIR), Paris CDG (YOTELAIR), US airports including Atlanta, Philadelphia, and Dallas Fort Worth (Minute Suites), and Dubai and Doha through various hotel brands. Coverage varies by terminal — check individual airport listings.',
+  },
 ];
 
 export default function PrivateRoomsPage() {
@@ -32,8 +62,8 @@ export default function PrivateRoomsPage() {
   useEffect(() => {
     fetchFacilities();
     updatePageMeta(
-      'Private Rooms in Airports Worldwide (2026 Guide) | RestInAirport.com',
-      'Discover private room and suite-style facilities at 100+ airports worldwide. Compare hourly rates, transit-safe locations, and amenities for comfortable layover rest.',
+      'Airport Private Rooms: Airside Access, Prices & Best Options (2026) | RestInAirport',
+      'Find private rooms inside airport terminals at major hubs worldwide. Compare airside vs landside access, hourly pricing, shower availability, and booking tips for transit passengers.',
       `${window.location.origin}/private-rooms`,
       generateFAQStructuredData(PRIVATE_ROOMS_FAQ)
     );
@@ -59,53 +89,80 @@ export default function PrivateRoomsPage() {
   const privateRoomFacilities = filteredFacilities;
   const airportCount = new Set(privateRoomFacilities.map(f => f.airport)).size;
 
-  const faqItems = PRIVATE_ROOMS_FAQ;
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col">
       <Helmet>
-        <title>Private Rooms in Airports Worldwide (2026 Guide) | RestInAirport.com</title>
-        <meta name="description" content="Discover private room and suite-style facilities at 100+ airports worldwide. Compare hourly rates, transit-safe locations, and amenities for comfortable layover rest." />
+        <title>Airport Private Rooms: Airside Access, Prices & Best Options (2026) | RestInAirport</title>
+        <meta name="description" content="Find private rooms inside airport terminals at major hubs worldwide. Compare airside vs landside access, hourly pricing, shower availability, and booking tips for transit passengers." />
         <link rel="canonical" href="https://restinairport.com/private-rooms" />
-        <meta property="og:title" content="Private Rooms in Airports Worldwide (2026 Guide) | RestInAirport.com" />
-        <meta property="og:description" content="Discover private room and suite-style facilities at 100+ airports worldwide." />
+        <meta property="og:title" content="Airport Private Rooms: Airside Access, Prices & Best Options | RestInAirport" />
+        <meta property="og:description" content="Find private rooms inside airport terminals. Compare access, pricing, and transit eligibility." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://restinairport.com/private-rooms" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Private Rooms in Airports Worldwide (2026 Guide) | RestInAirport.com" />
-        <meta name="twitter:description" content="Discover private room and suite-style facilities at 100+ airports worldwide." />
+        <meta name="twitter:title" content="Airport Private Rooms: Airside Access, Prices & Best Options | RestInAirport" />
+        <meta name="twitter:description" content="Find private rooms inside airport terminals. Compare access, pricing, and transit eligibility." />
       </Helmet>
       <Header />
 
       <main className="flex-1">
         <div className="bg-gradient-to-r from-slate-800 to-slate-700 text-white py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Private Rooms in Airports Worldwide (2026 Guide)</h1>
+            <div className="mb-3">
+              <span className="inline-block text-xs font-semibold uppercase tracking-widest text-slate-300 bg-slate-700 px-3 py-1 rounded-full">
+                Category
+              </span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Private Rooms in Airports</h1>
+            <p className="text-lg text-slate-200 max-w-3xl mb-8 leading-relaxed">
+              Fully enclosed, lockable private rooms inside airport terminals — available by the hour. More space and privacy than sleep pods, at a lower commitment than a transit hotel. Most are airside.
+            </p>
 
-            <div className="flex flex-wrap gap-6 mt-8">
-              <div className="flex items-center space-x-2">
-                <Hotel className="w-6 h-6" />
-                <div>
-                  <div className="text-2xl font-bold">{privateRoomFacilities.length}</div>
-                  <div className="text-sm text-slate-300">Facilities</div>
-                </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+              <div className="bg-slate-700 rounded-xl px-4 py-3 text-center">
+                <div className="text-2xl font-bold">{privateRoomFacilities.length}</div>
+                <div className="text-xs text-slate-300 mt-0.5">Facilities</div>
               </div>
-              <div className="flex items-center space-x-2">
-                <MapPin className="w-6 h-6" />
-                <div>
-                  <div className="text-2xl font-bold">{airportCount}</div>
-                  <div className="text-sm text-slate-300">Airports</div>
-                </div>
+              <div className="bg-slate-700 rounded-xl px-4 py-3 text-center">
+                <div className="text-2xl font-bold">{airportCount}</div>
+                <div className="text-xs text-slate-300 mt-0.5">Airports</div>
+              </div>
+              <div className="bg-slate-700 rounded-xl px-4 py-3 text-center">
+                <div className="text-sm font-bold">$40–$80</div>
+                <div className="text-xs text-slate-300 mt-0.5">Per Hour</div>
+              </div>
+              <div className="bg-slate-700 rounded-xl px-4 py-3 text-center">
+                <div className="text-sm font-bold">Mostly Airside</div>
+                <div className="text-xs text-slate-300 mt-0.5">Access Type</div>
               </div>
             </div>
           </div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="prose prose-slate max-w-none mb-12">
-            <p className="text-lg text-slate-700 leading-relaxed">
-              Private rooms in airports are fully enclosed spaces that offer travelers a quiet, secure place to rest during a layover. Unlike sleep pods, private rooms provide more space, better comfort, and often include beds, work areas, and sometimes private bathrooms, making them ideal for longer layovers or travelers who need full privacy inside the airport.
-            </p>
+
+          <div className="grid sm:grid-cols-3 gap-4 mb-10">
+            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <span className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">Best for</span>
+              </div>
+              <p className="text-sm text-slate-700 leading-relaxed">Layovers of 3–8 hours. Travelers needing full privacy. Families. Business travelers who need a quiet space to work or sleep before an onward flight.</p>
+            </div>
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <AlertCircle className="w-4 h-4 text-amber-600" />
+                <span className="text-xs font-semibold text-amber-700 uppercase tracking-wider">Not ideal for</span>
+              </div>
+              <p className="text-sm text-slate-700 leading-relaxed">Very long stays over 10 hours where a transit hotel would be better value. Budget travelers — private rooms cost more per hour than sleep pods.</p>
+            </div>
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Lock className="w-4 h-4 text-slate-500" />
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Access note</span>
+              </div>
+              <p className="text-sm text-slate-700 leading-relaxed">Most private rooms at major airports are airside. No immigration clearance needed for transit passengers. Verify each facility's location before booking.</p>
+            </div>
           </div>
 
           {loading ? (
@@ -115,398 +172,259 @@ export default function PrivateRoomsPage() {
             </div>
           ) : (
             <>
-              <FacilityFilters
-                facilities={facilities}
-                onFilterChange={setFilteredFacilities}
-              />
+              <FacilityFilters facilities={facilities} onFilterChange={setFilteredFacilities} />
               <SearchResults facilities={privateRoomFacilities} query="" />
             </>
           )}
 
-          <div className="mt-16 space-y-12">
+          <div className="mt-16 space-y-14">
+
             <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Global Coverage</h2>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">What Are Airport Private Rooms?</h2>
               <p className="text-slate-700 leading-relaxed mb-4">
-                This page focuses specifically on private room and suite-style facilities within a global dataset of 200+ airport rest facilities across 100+ airports worldwide.
+                Airport private rooms are fully enclosed, lockable rest spaces inside terminal buildings, rented by the hour. They are positioned between sleep pods and transit hotels in terms of space, price, and service level. A private room provides a proper flat bed, total privacy, and a lockable door — without requiring a hotel-style check-in or minimum stay.
               </p>
               <p className="text-slate-700 leading-relaxed mb-4">
-                Private room options are available in major international hubs across Asia, the Middle East, Europe, and North America. You can explore all{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/airports'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  airports
-                </a>{' '}
-                or drill into specific locations directly from each listing above.
+                Brands in this category include Minute Suites (US airports), YOTELAIR cabins (Europe), Aerotel (Asia and Middle East), and izZzleep (Europe/Asia). The facilities vary in size and amenity level — some include en-suite showers, others do not. Check individual listings for what is included.
               </p>
               <p className="text-slate-700 leading-relaxed">
-                Each facility listing includes terminal location, access requirements, pricing estimates, and whether the room is available without immigration.
+                For layovers under 3 hours,{' '}
+                <a href="/sleep-pods" onClick={(e) => { e.preventDefault(); navigateTo('/sleep-pods'); }} className="font-semibold text-slate-900 hover:text-sky-600 underline underline-offset-2">sleep pods</a>{' '}
+                offer better value. For layovers over 8 hours,{' '}
+                <a href="/transit-hotels" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600 underline underline-offset-2">transit hotels</a>{' '}
+                provide a more complete rest experience.
               </p>
             </section>
 
             <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">What Are Private Rooms in Airports?</h2>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                Private rooms in airports are enclosed, hotel-style spaces designed for travelers who want comfort, privacy, and space during a layover.
-              </p>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                They are commonly found in dedicated rest facilities or premium services and offer significantly more comfort than{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/sleep-pods'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  sleep pods
-                </a>, while remaining more flexible than full hotel stays under{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  transit hotels
-                </a>.
-              </p>
-              <p className="text-slate-700 leading-relaxed">
-                Typical features include a bed or daybed, workspace, power outlets, and sound insulation. Some premium rooms may include private bathrooms, showers, or larger suite layouts.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Who Should Use Private Rooms?</h2>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                Private rooms are ideal for:
-              </p>
-              <ul className="list-disc pl-6 space-y-2 text-slate-700 mb-4">
-                <li>Layovers between 3 to 10 hours</li>
-                <li>Business travelers needing workspace and rest</li>
-                <li>Travelers who want privacy beyond{' '}
-                  <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/sleep-pods'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                    sleep pods
-                  </a>
-                </li>
-                <li>Passengers willing to pay more for comfort</li>
-              </ul>
-              <p className="text-slate-700 leading-relaxed">
-                If your goal is both rest and productivity, private rooms are often the best option between{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/sleep-pods'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  sleep pods
-                </a>{' '}
-                and{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  transit hotels
-                </a>.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Can You Use Private Rooms Without a Visa?</h2>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                It depends on the location.
-              </p>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                Some private rooms are located airside, allowing access without passing immigration. Others are landside and require entry into the country.
-              </p>
-              <p className="text-slate-700 leading-relaxed">
-                Always check the facility details before booking. If you cannot pass immigration, consider alternatives under{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/sleep-pods'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  sleep pods
-                </a>{' '}
-                or explore suitable options within{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  transit hotels
-                </a>.
-              </p>
-
-              <div className="mt-6 bg-sky-50 border border-sky-200 rounded-xl p-5 flex gap-4 items-start">
-                <div className="flex-shrink-0 w-10 h-10 bg-sky-100 rounded-full flex items-center justify-center">
-                  <svg className="w-5 h-5 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">Airside vs Landside: Access for Transit Passengers</h2>
+              <div className="grid sm:grid-cols-2 gap-4 max-w-3xl mb-5">
+                <div className="bg-white border border-slate-200 rounded-xl p-5">
+                  <p className="text-sm font-semibold text-emerald-700 mb-2">Airside Private Rooms</p>
+                  <p className="text-sm text-slate-600 leading-relaxed mb-3">Located inside the secure terminal zone after passport control. Transit passengers use these without clearing immigration. No visa for the transit country required. The standard setup at major hub airports.</p>
+                  <p className="text-xs text-emerald-700 font-medium">Accessible to all transit passengers</p>
+                </div>
+                <div className="bg-white border border-slate-200 rounded-xl p-5">
+                  <p className="text-sm font-semibold text-amber-700 mb-2">Landside Private Rooms</p>
+                  <p className="text-sm text-slate-600 leading-relaxed mb-3">Located outside the secure zone. Clearing immigration is required to access these. Passengers may need a transit visa or entry permission for the host country. Less common at major hub airports.</p>
+                  <p className="text-xs text-amber-700 font-medium">Check visa rules before booking</p>
+                </div>
+              </div>
+              <div className="bg-sky-50 border border-sky-200 rounded-xl p-5 flex gap-4 items-start max-w-3xl">
+                <div className="flex-shrink-0 w-9 h-9 bg-sky-100 rounded-full flex items-center justify-center">
+                  <ShieldCheck className="w-5 h-5 text-sky-600" />
                 </div>
                 <div>
-                  <p className="font-semibold text-sky-900 mb-1">Unsure about your transit visa status?</p>
+                  <p className="font-semibold text-sky-900 mb-1">Planning to use a landside facility?</p>
                   <p className="text-sky-800 text-sm leading-relaxed">
-                    Airside vs landside access depends on your nationality and itinerary.{' '}
+                    Transit and short-stay visa rules depend on your nationality and the country you are transiting.{' '}
                     <a href="https://www.visainfoguide.com" target="_blank" rel="noopener noreferrer" className="font-semibold underline underline-offset-2 hover:text-sky-600">
-                      Confirm your visa requirements at visainfoguide.com
-                    </a>
-                    {' '}before booking.
+                      Check your entry and transit options at visainfoguide.com
+                    </a>{' '}
+                    before booking any landside facility.
                   </p>
                 </div>
               </div>
             </section>
 
             <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Private Rooms vs Other Airport Sleep Options</h2>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">Private Rooms vs Other Airport Rest Options</h2>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm border-collapse max-w-4xl">
+                  <thead>
+                    <tr className="bg-slate-100 text-left">
+                      <th className="px-4 py-3 font-semibold text-slate-700 rounded-tl-lg">Option</th>
+                      <th className="px-4 py-3 font-semibold text-slate-700">Privacy</th>
+                      <th className="px-4 py-3 font-semibold text-slate-700">Best layover</th>
+                      <th className="px-4 py-3 font-semibold text-slate-700">Typical cost</th>
+                      <th className="px-4 py-3 font-semibold text-slate-700 rounded-tr-lg">Shower</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    <tr className="bg-slate-700 text-white">
+                      <td className="px-4 py-3 font-semibold">Private Rooms</td>
+                      <td className="px-4 py-3">Fully private, lockable</td>
+                      <td className="px-4 py-3">3–10 hours</td>
+                      <td className="px-4 py-3">$40–$80/hr</td>
+                      <td className="px-4 py-3">Often included</td>
+                    </tr>
+                    <tr className="bg-white">
+                      <td className="px-4 py-3">
+                        <a href="/sleep-pods" onClick={(e) => { e.preventDefault(); navigateTo('/sleep-pods'); }} className="font-medium text-slate-800 hover:text-sky-600 underline underline-offset-2">Sleep Pods</a>
+                      </td>
+                      <td className="px-4 py-3 text-slate-600">Semi to fully enclosed capsule</td>
+                      <td className="px-4 py-3 text-slate-600">2–8 hours</td>
+                      <td className="px-4 py-3 text-slate-600">$10–$50/hr</td>
+                      <td className="px-4 py-3 text-slate-600">Usually separate</td>
+                    </tr>
+                    <tr className="bg-slate-50">
+                      <td className="px-4 py-3">
+                        <a href="/transit-hotels" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-medium text-slate-800 hover:text-sky-600 underline underline-offset-2">Transit Hotels</a>
+                      </td>
+                      <td className="px-4 py-3 text-slate-600">Full hotel room with services</td>
+                      <td className="px-4 py-3 text-slate-600">6–16+ hours</td>
+                      <td className="px-4 py-3 text-slate-600">$80–$250</td>
+                      <td className="px-4 py-3 text-slate-600">Private en-suite</td>
+                    </tr>
+                    <tr className="bg-white">
+                      <td className="px-4 py-3">
+                        <a href="/lounge-sleep" onClick={(e) => { e.preventDefault(); navigateTo('/lounge-sleep'); }} className="font-medium text-slate-800 hover:text-sky-600 underline underline-offset-2">Lounge Sleep</a>
+                      </td>
+                      <td className="px-4 py-3 text-slate-600">Shared seating area</td>
+                      <td className="px-4 py-3 text-slate-600">Under 4 hours</td>
+                      <td className="px-4 py-3 text-slate-600">$30–$120/visit</td>
+                      <td className="px-4 py-3 text-slate-600">Often included</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
 
-              <div className="space-y-4">
-                <div className="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">Private Rooms</h3>
-                  <p className="text-slate-700 leading-relaxed">
-                    Best for medium-length layovers with high comfort and privacy.
-                  </p>
+            <section>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">Best Airports for Private Rooms</h2>
+              <p className="text-slate-700 leading-relaxed mb-4">
+                Private room availability is strongest at major long-haul hub airports. Key locations include:
+              </p>
+              <ul className="space-y-2 text-slate-700 mb-4">
+                <li className="flex items-start gap-2"><a href="/airport/london-heathrow-lhr" onClick={(e) => { e.preventDefault(); navigateTo('/airport/london-heathrow-lhr'); }} className="font-semibold min-w-fit hover:text-sky-600 hover:underline">London Heathrow (LHR)</a> — YOTELAIR cabins in T4, Aerotel in multiple terminals; all airside</li>
+                <li className="flex items-start gap-2"><a href="/airport/amsterdam-schiphol-ams" onClick={(e) => { e.preventDefault(); navigateTo('/airport/amsterdam-schiphol-ams'); }} className="font-semibold min-w-fit hover:text-sky-600 hover:underline">Amsterdam Schiphol (AMS)</a> — YOTELAIR cabins airside in the main terminal</li>
+                <li className="flex items-start gap-2"><a href="/airport/paris-charles-de-gaulle-cdg" onClick={(e) => { e.preventDefault(); navigateTo('/airport/paris-charles-de-gaulle-cdg'); }} className="font-semibold min-w-fit hover:text-sky-600 hover:underline">Paris CDG (CDG)</a> — YOTELAIR cabins in terminal 2E, airside</li>
+                <li className="flex items-start gap-2"><a href="/airport/singapore-changi-sin" onClick={(e) => { e.preventDefault(); navigateTo('/airport/singapore-changi-sin'); }} className="font-semibold min-w-fit hover:text-sky-600 hover:underline">Singapore Changi (SIN)</a> — Aerotel rooms across T1/T2/T3, all airside</li>
+                <li className="flex items-start gap-2"><a href="/airport/hartsfield-jackson-atlanta-international-atl" onClick={(e) => { e.preventDefault(); navigateTo('/airport/hartsfield-jackson-atlanta-international-atl'); }} className="font-semibold min-w-fit hover:text-sky-600 hover:underline">Atlanta (ATL)</a> — Minute Suites in Concourse A and D, airside</li>
+                <li className="flex items-start gap-2"><a href="/airport/dallas-fort-worth-dfw" onClick={(e) => { e.preventDefault(); navigateTo('/airport/dallas-fort-worth-dfw'); }} className="font-semibold min-w-fit hover:text-sky-600 hover:underline">Dallas Fort Worth (DFW)</a> — Minute Suites in multiple concourses</li>
+              </ul>
+              <p className="text-slate-700 leading-relaxed">
+                Browse all private room facilities above, or explore by airport on the{' '}
+                <a href="/airports" onClick={(e) => { e.preventDefault(); navigateTo('/airports'); }} className="font-semibold text-slate-900 hover:text-sky-600 underline underline-offset-2">airports page</a>.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">When to Use a Private Room vs Alternatives</h2>
+              <div className="space-y-3 max-w-2xl">
+                <div className="flex items-start gap-3 bg-white border border-slate-200 rounded-xl p-4">
+                  <Clock className="w-5 h-5 text-slate-500 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-slate-800 text-sm">Layover under 3 hours</p>
+                    <p className="text-sm text-slate-600">A <a href="/sleep-pods" onClick={(e) => { e.preventDefault(); navigateTo('/sleep-pods'); }} className="font-semibold text-slate-900 hover:text-sky-600">sleep pod</a> or lounge is likely sufficient and more cost-effective.</p>
+                  </div>
                 </div>
-
-                <div className="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">
-                    <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/sleep-pods'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                      Sleep Pods
-                    </a>
-                  </h3>
-                  <p className="text-slate-700 leading-relaxed">
-                    Better for shorter rests with lower cost and compact space.
-                  </p>
+                <div className="flex items-start gap-3 bg-slate-700 text-white rounded-xl p-4">
+                  <Clock className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-sm">Layover 3–8 hours</p>
+                    <p className="text-sm text-slate-200">Private rooms are the best option. Full privacy, proper flat bed, and hourly pricing that beats transit hotel rates for shorter stays.</p>
+                  </div>
                 </div>
-
-                <div className="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">
-                    <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                      Transit Hotels
-                    </a>
-                  </h3>
-                  <p className="text-slate-700 leading-relaxed">
-                    Best for overnight stays with full hotel experience.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-lg p-6 shadow-sm border border-slate-200">
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">
-                    <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/lounge-sleep'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                      Lounge Sleep
-                    </a>
-                  </h3>
-                  <p className="text-slate-700 leading-relaxed">
-                    Suitable only for light rest with shared spaces.
-                  </p>
+                <div className="flex items-start gap-3 bg-white border border-slate-200 rounded-xl p-4">
+                  <Clock className="w-5 h-5 text-slate-500 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-slate-800 text-sm">Layover 8+ hours or overnight</p>
+                    <p className="text-sm text-slate-600">
+                      A <a href="/transit-hotels" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600">transit hotel</a> offers better value for longer stays — full hotel services, a proper overnight rate, and amenities not available in private rooms.
+                    </p>
+                  </div>
                 </div>
               </div>
-
-              <p className="text-slate-700 leading-relaxed mt-4">
-                Private rooms offer a strong balance between flexibility and comfort compared to{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/sleep-pods'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  sleep pods
-                </a>,{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  transit hotels
-                </a>, and{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/lounge-sleep'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  lounge sleep
-                </a>.
-              </p>
             </section>
 
             <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">How Much Do Private Rooms Cost?</h2>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                Pricing varies by airport and provider:
-              </p>
-              <ul className="list-disc pl-6 space-y-2 text-slate-700 mb-4">
-                <li>40 to 60 USD per hour for standard rooms</li>
-                <li>60 to 80 USD per hour for premium suites</li>
-                <li>100+ USD for extended stays or packages</li>
-              </ul>
-              <p className="text-slate-700 leading-relaxed">
-                Most facilities offer hourly booking with minimum durations.
-              </p>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">Pricing: What to Expect</h2>
+              <div className="grid sm:grid-cols-3 gap-4 max-w-3xl mb-4">
+                <div className="bg-white border border-slate-200 rounded-xl p-4 text-center">
+                  <DollarSign className="w-6 h-6 text-slate-500 mx-auto mb-2" />
+                  <p className="text-sm font-semibold text-slate-800">Hourly rate</p>
+                  <p className="text-xl font-bold text-slate-900 my-1">$40–$80</p>
+                  <p className="text-xs text-slate-500">per hour — varies by brand and airport</p>
+                </div>
+                <div className="bg-white border border-slate-200 rounded-xl p-4 text-center">
+                  <DollarSign className="w-6 h-6 text-slate-500 mx-auto mb-2" />
+                  <p className="text-sm font-semibold text-slate-800">Short stay block</p>
+                  <p className="text-xl font-bold text-slate-900 my-1">$120–$180</p>
+                  <p className="text-xs text-slate-500">typical 4–6 hour block at major hub airports</p>
+                </div>
+                <div className="bg-white border border-slate-200 rounded-xl p-4 text-center">
+                  <DollarSign className="w-6 h-6 text-slate-500 mx-auto mb-2" />
+                  <p className="text-sm font-semibold text-slate-800">With shower</p>
+                  <p className="text-xl font-bold text-slate-900 my-1">+$0–$20</p>
+                  <p className="text-xs text-slate-500">some facilities include shower; others charge a small supplement</p>
+                </div>
+              </div>
+              <p className="text-sm text-slate-500">Rates vary by airport, brand, and time of day. Check individual listings for current pricing.</p>
             </section>
 
             <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Best Airports for Private Rooms</h2>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                Airports known for private room options include Atlanta, Dallas, Charlotte, Miami, and Nashville.
-              </p>
-              <p className="text-slate-700 leading-relaxed">
-                You can explore all supported{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/airports'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  airports
-                </a>{' '}
-                or directly through the listings above.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">When Should You Use a Private Room?</h2>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                Private rooms are best when your layover is between 3 and 10 hours and you need both rest and privacy.
-              </p>
-              <p className="text-slate-700 leading-relaxed">
-                For shorter layovers, consider{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/sleep-pods'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  sleep pods
-                </a>.{' '}
-                For overnight stays,{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  transit hotels
-                </a>{' '}
-                provide a more complete experience.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Tips for Booking Private Rooms</h2>
-              <ul className="list-disc pl-6 space-y-2 text-slate-700">
-                <li>Confirm whether the room is airside or landside.</li>
-                <li>Check minimum booking duration and pricing structure.</li>
-                <li>Book early in busy airports.</li>
-                <li>Review included amenities before booking.</li>
-              </ul>
-            </section>
-
-            <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">How to Choose the Right Sleep Option</h2>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                For short layovers under 4 hours,{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/lounge-sleep'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  lounges
-                </a>{' '}
-                may be sufficient.
-              </p>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                For 4 to 8 hours, private rooms or{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/sleep-pods'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  sleep pods
-                </a>{' '}
-                offer good balance.
-              </p>
-              <p className="text-slate-700 leading-relaxed">
-                For longer layovers,{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  transit hotels
-                </a>{' '}
-                provide full comfort and space.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Frequently Asked Questions</h2>
-              <div className="space-y-3">
-                {faqItems.map((item, index) => (
-                  <div key={index} className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+              <h2 className="text-2xl font-bold text-slate-900 mb-5">Frequently Asked Questions</h2>
+              <div className="border border-slate-200 rounded-xl overflow-hidden divide-y divide-slate-200 max-w-3xl">
+                {PRIVATE_ROOMS_FAQ.map((item, index) => (
+                  <div key={index}>
                     <button
                       onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
-                      className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-slate-50 transition-colors"
+                      className="w-full px-5 py-4 text-left flex items-center justify-between bg-white hover:bg-slate-50 transition-colors"
+                      aria-expanded={openFaqIndex === index}
                     >
-                      <h3 className="text-lg font-semibold text-slate-900">{item.question}</h3>
-                      <ChevronDown
-                        className={`w-5 h-5 text-slate-600 transition-transform ${
-                          openFaqIndex === index ? 'rotate-180' : ''
-                        }`}
-                      />
+                      <span className="font-medium text-slate-800 pr-4">{item.question}</span>
+                      <ChevronDown className={`w-5 h-5 text-slate-400 flex-shrink-0 transition-transform duration-200 ${openFaqIndex === index ? 'rotate-180' : ''}`} />
                     </button>
-                    {openFaqIndex === index && (
-                      <div className="px-6 pb-4">
-                        <p className="text-slate-700 leading-relaxed">{item.answer}</p>
+                    <div className={`overflow-hidden transition-all duration-200 ${openFaqIndex === index ? 'max-h-64' : 'max-h-0'}`}>
+                      <div className="px-5 pb-5 bg-white">
+                        <p className="text-slate-600 leading-relaxed text-sm">{item.answer}</p>
                       </div>
-                    )}
+                    </div>
+                    <noscript>
+                      <div className="px-5 pb-5 bg-white">
+                        <p className="text-slate-600 leading-relaxed text-sm">{item.answer}</p>
+                      </div>
+                    </noscript>
                   </div>
                 ))}
               </div>
             </section>
 
-            <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Final Thoughts on Private Rooms in Airports</h2>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                Private rooms in airports offer one of the best balances between comfort, privacy, and flexibility during a layover. They provide significantly more space than{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/sleep-pods'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  sleep pods
-                </a>{' '}
-                while remaining more accessible and flexible than full{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  transit hotels
-                </a>.
-              </p>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                For travelers who need both rest and functionality, private rooms are often the most practical choice. They allow you to sleep, work, and recharge in a quiet, enclosed environment without committing to a full hotel stay.
-              </p>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                However, they are not always the best option for every situation. For shorter layovers,{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/sleep-pods'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  sleep pods
-                </a>{' '}
-                may be more efficient, while longer or overnight stays are better suited for{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  transit hotels
-                </a>. If your goal is simply to relax for a short time,{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/lounge-sleep'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  lounge sleep
-                </a>{' '}
-                may be sufficient.
-              </p>
-              <p className="text-slate-700 leading-relaxed">
-                The key is understanding how private rooms fit within the broader range of airport sleep options.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Explore Other Airport Sleep Options</h2>
-              <div className="grid md:grid-cols-3 gap-6 mb-8">
-                <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow">
-                  <h3 className="text-xl font-bold text-slate-900 mb-3">Sleep Pods in Airports</h3>
-                  <p className="text-slate-700 leading-relaxed mb-4">
-                    Compact, private pods designed for short layovers and quick rest without leaving the terminal.
-                  </p>
-                  <button
-                    onClick={() => navigateTo('/sleep-pods')}
-                    className="w-full bg-slate-800 hover:bg-slate-900 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-                  >
-                    Explore Sleep Pods
-                  </button>
-                </div>
-
-                <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow">
-                  <h3 className="text-xl font-bold text-slate-900 mb-3">Transit Hotels in Airports</h3>
-                  <p className="text-slate-700 leading-relaxed mb-4">
-                    Full hotel rooms inside airport terminals for overnight stays and maximum comfort. Best for long layovers and proper sleep.
-                  </p>
-                  <button
-                    onClick={() => navigateTo('/transit-hotels')}
-                    className="w-full bg-slate-800 hover:bg-slate-900 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-                  >
-                    Explore Transit Hotels
-                  </button>
-                </div>
-
-                <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow">
-                  <h3 className="text-xl font-bold text-slate-900 mb-3">Lounge Sleep Options</h3>
-                  <p className="text-slate-700 leading-relaxed mb-4">
-                    Rest in airport lounges with comfortable seating, food, and WiFi. Suitable for short layovers and light rest.
-                  </p>
-                  <button
-                    onClick={() => navigateTo('/lounge-sleep')}
-                    className="w-full bg-slate-800 hover:bg-slate-900 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-                  >
-                    Explore Lounge Sleep
-                  </button>
-                </div>
+            <section className="border-t border-slate-200 pt-10">
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">Private Rooms: Bottom Line</h2>
+              <div className="max-w-3xl space-y-3 text-slate-600 leading-relaxed">
+                <p>
+                  Airport private rooms are the most practical choice for layovers of 3–8 hours where you need genuine privacy and a proper rest space. They deliver a meaningful step up from sleep pods — a flat bed, total enclosure, and a lockable door — without the cost or commitment of a full transit hotel stay.
+                </p>
+                <p>
+                  For transit passengers at major hub airports, the airside placement of most private room brands like Minute Suites, YOTELAIR, and Aerotel means access without immigration clearance. This makes them suitable for international passengers on tight connections who cannot or do not want to clear customs.
+                </p>
+                <p>
+                  For shorter connections, a{' '}
+                  <a href="/sleep-pods" onClick={(e) => { e.preventDefault(); navigateTo('/sleep-pods'); }} className="font-semibold text-slate-800 underline underline-offset-2 hover:text-slate-600">sleep pod</a>{' '}
+                  offers better hourly value. For overnight layovers, a{' '}
+                  <a href="/transit-hotels" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-800 underline underline-offset-2 hover:text-slate-600">transit hotel</a>{' '}
+                  justifies the additional cost. For short connections with food and Wi-Fi as the priority, a{' '}
+                  <a href="/lounge-sleep" onClick={(e) => { e.preventDefault(); navigateTo('/lounge-sleep'); }} className="font-semibold text-slate-800 underline underline-offset-2 hover:text-slate-600">lounge</a>{' '}
+                  is the most efficient option. Browse all{' '}
+                  <a href="/airports" onClick={(e) => { e.preventDefault(); navigateTo('/airports'); }} className="font-semibold text-slate-800 underline underline-offset-2 hover:text-slate-600">airports</a>{' '}
+                  to see what private room options are available on your route.
+                </p>
               </div>
             </section>
 
             <section>
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Choosing the Best Airport Sleep Option</h2>
-              <p className="text-slate-700 leading-relaxed mb-4">
-                Choosing the right airport sleep solution depends on your layover duration and comfort requirements.
-              </p>
-              <ul className="list-disc pl-6 space-y-2 text-slate-700 mb-4">
-                <li>
-                  For short layovers under 4 hours,{' '}
-                  <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/lounge-sleep'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                    lounge sleep
-                  </a>{' '}
-                  is usually enough
-                </li>
-                <li>
-                  For 4 to 8 hours,{' '}
-                  <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/sleep-pods'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                    sleep pods
-                  </a>{' '}
-                  or private rooms offer a good balance
-                </li>
-                <li>
-                  For 8+ hours,{' '}
-                  <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                    transit hotels
-                  </a>{' '}
-                  provide the best comfort and full rest
-                </li>
-              </ul>
-              <p className="text-slate-700 leading-relaxed">
-                Private rooms sit in the middle of the spectrum, offering more comfort than{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/sleep-pods'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  sleep pods
-                </a>{' '}
-                and more flexibility than{' '}
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="font-semibold text-slate-900 hover:text-sky-600">
-                  transit hotels
-                </a>.
-              </p>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">Explore Other Airport Rest Options</h2>
+              <div className="grid sm:grid-cols-3 gap-4 max-w-3xl">
+                <a href="/sleep-pods" onClick={(e) => { e.preventDefault(); navigateTo('/sleep-pods'); }} className="bg-white border border-slate-200 rounded-xl p-5 hover:border-slate-300 hover:shadow-sm transition-all group">
+                  <Hotel className="w-6 h-6 text-slate-600 mb-3" />
+                  <p className="font-semibold text-slate-800 mb-1 group-hover:text-slate-600">Sleep Pods</p>
+                  <p className="text-sm text-slate-500">Compact hourly capsules. Better value for shorter layovers under 3 hours.</p>
+                </a>
+                <a href="/transit-hotels" onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }} className="bg-white border border-slate-200 rounded-xl p-5 hover:border-slate-300 hover:shadow-sm transition-all group">
+                  <MapPin className="w-6 h-6 text-slate-600 mb-3" />
+                  <p className="font-semibold text-slate-800 mb-1 group-hover:text-slate-600">Transit Hotels</p>
+                  <p className="text-sm text-slate-500">Full hotel rooms for layovers of 8+ hours and overnight connections.</p>
+                </a>
+                <a href="/lounge-sleep" onClick={(e) => { e.preventDefault(); navigateTo('/lounge-sleep'); }} className="bg-white border border-slate-200 rounded-xl p-5 hover:border-slate-300 hover:shadow-sm transition-all group">
+                  <Hotel className="w-6 h-6 text-slate-600 mb-3" />
+                  <p className="font-semibold text-slate-800 mb-1 group-hover:text-slate-600">Lounge Sleep</p>
+                  <p className="text-sm text-slate-500">Light rest with food and Wi-Fi. Best for short connections with lounge access.</p>
+                </a>
+              </div>
             </section>
+
           </div>
         </div>
       </main>

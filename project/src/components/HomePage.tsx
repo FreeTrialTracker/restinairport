@@ -166,54 +166,54 @@ export default function HomePage() {
 
   const faqItems = [
     {
-      question: 'Can you sleep or rest at an airport?',
+      question: 'Do I need to clear immigration to use a transit hotel or sleep pod?',
       answer:
-        'Yes. Most major airports allow passengers to rest or sleep inside the terminal, provided you have a valid boarding pass. Many airports offer designated quiet zones, reclining seats, sleep pods, and pay-per-use rest facilities. Rules vary by airport, so it is worth checking before your trip.',
+        'It depends on where the facility is located. Airside facilities — including most sleep pod brands and transit hotels like Aerotel, YOTELAIR, and Oryx — are accessible without clearing immigration. You stay within the secure terminal zone. Landside facilities require you to exit the secure area, which means clearing immigration and potentially needing a transit or entry visa. Always check whether a facility is airside or landside before booking.',
     },
     {
-      question: 'What are airport sleep pods?',
+      question: 'What is the difference between a sleep pod, private room, transit hotel, and lounge?',
       answer:
-        'Airport sleep pods are small, private resting units located inside airport terminals. They typically include a flat or reclining bed, power outlets, Wi-Fi, and sometimes a screen. You book them by the hour, making them ideal for short layovers. Popular brands include Minute Suites, Napcabs, GoSleep, and YotelAir.',
+        'Sleep pods are compact, capsule-style units booked by the hour — best for 2–6 hour layovers. Private rooms are larger, lockable rooms inside the terminal with more space, priced hourly or by short-stay block. Transit hotels are full hotel rooms, usually with a bed, shower, and hotel services — designed for 6–12+ hour stays or overnights. Lounges are shared spaces with seating, food, and sometimes rest chairs — not designed for actual sleep but useful for shorter layovers with included meal service.',
     },
     {
-      question: 'Are there free rest areas at airports?',
+      question: 'Can I use airport rest facilities without a visa during a transit stop?',
       answer:
-        'Many airports provide free rest areas with reclining or lounge-style seating available to all passengers. Singapore Changi, Doha Hamad, and Seoul Incheon are among the best airports for free sleeping facilities. RestInAirport lists all free and paid rest options for each airport so you can plan ahead.',
+        'Yes, if the facility is airside. Airside transit hotels, sleep pods, and private rooms are accessible after security screening but before immigration. No visa or entry permit is required. If you need a facility landside — outside the secure zone — you will need to check visa-free access rules for that country. Nationals of some countries require a transit visa even to remain in the international zone.',
     },
     {
-      question: 'How much do airport sleep pods cost?',
+      question: 'How much does a transit hotel inside an airport cost?',
       answer:
-        'Airport sleep pod prices typically range from $15 to $60 per hour, depending on the airport, pod type, and duration. Some providers offer flat rates for 4 to 8 hour blocks, which can be more economical for longer layovers.',
+        'Airside transit hotel rates typically start at $80–$120 for a short stay (4–6 hours) and $120–$250 for an overnight stay. Premium brands like YOTELAIR and Aerotel charge at the higher end, especially at major European and Middle Eastern hubs. Pricing varies by airport, room type, and duration.',
     },
     {
-      question: 'What is the difference between an airport lounge and a sleep pod?',
+      question: 'Which airports have the best sleep and rest facilities?',
       answer:
-        'An airport lounge is a shared space offering comfortable seating, food, drinks, showers, and sometimes quiet rest areas. Access is usually via airline status, a day pass, or Priority Pass. A sleep pod is a private, enclosed unit designed specifically for sleeping, booked by the hour. Lounges suit longer layovers with varied amenities while sleep pods are better for guaranteed privacy and uninterrupted rest.',
+        'Singapore Changi (SIN), Seoul Incheon (ICN), Doha Hamad (DOH), Dubai International (DXB), Amsterdam Schiphol (AMS), and Munich (MUC) consistently rank highest. These airports offer a full range of airside options: sleep pods, transit hotels, private rooms, shower facilities, and free rest zones — all without requiring immigration clearance.',
     },
     {
-      question: 'Can I rest at an airport during a long layover?',
+      question: 'Are airport sleep pods safe?',
       answer:
-        'Absolutely. Long layovers are one of the most common reasons travelers use airport rest facilities. Options include free terminal seating, paid sleep pods, airport lounges with day passes, and in-terminal transit hotels. RestInAirport helps you find all available options at your specific airport so you can make the most of your layover time.',
+        'Yes. Sleep pods at major international airports are in secure, staffed areas within the terminal. Most have lockable doors or privacy screens, and pods located airside are within the security perimeter. Standard precautions apply: keep your boarding pass and valuables with you, and use a bag lock if sleeping.',
     },
     {
-      question: 'Do all airports have sleep pods?',
+      question: 'Can I book airport rest facilities in advance?',
       answer:
-        'No. Sleep pods are currently available at a growing number of major international airports, but not all. They are most common at large hub airports in Europe, Asia, and the United States. Smaller regional airports may only offer standard seating or basic lounge facilities. Use RestInAirport to check what is available at your specific airport.',
+        'Most providers allow — and recommend — advance booking, especially at busy hubs. YOTELAIR, Aerotel, Minute Suites, and Plaza Premium all have online booking systems. Sleep pod brands like GoSleep and Napcabs are typically walk-in only. For overnight stays or layovers longer than 8 hours, advance booking is strongly advised.',
     },
     {
-      question: 'Is it safe to sleep at an airport?',
+      question: 'What do airport lounges offer for sleeping?',
       answer:
-        'Sleeping at an airport is generally safe, particularly in the secure airside zone past security. Most international airports have 24-hour security staff and CCTV. It is advisable to keep your belongings secure, use a bag strap or lock, and choose well-lit areas near other travelers or staff when resting in open terminal areas.',
+        'Standard airport lounges offer comfortable seating, food, drinks, and sometimes shower access — but they are not designed for sleeping. Most lounges have armchair-style seating rather than flat beds, shared spaces with noise, and no guaranteed quiet hours. If actual rest is the priority for a layover over 4 hours, sleep pods or private rooms deliver significantly better conditions.',
     },
     {
-      question: 'What airports have the best rest facilities?',
+      question: 'What is the cheapest way to rest at an airport?',
       answer:
-        'Singapore Changi, Doha Hamad International, Seoul Incheon, Dubai International, and Amsterdam Schiphol are consistently rated among the best airports for rest facilities, offering free snooze lounges, sleep pods, transit hotels, and shower facilities. Browse the RestInAirport directory to compare facilities at hundreds of airports worldwide.',
+        'The cheapest option is free terminal seating in quiet zones, available at most major airports. For paid facilities, sleep pods are typically the most affordable at $10–$30/hour. Airport lounges accessed via credit card membership (e.g., Priority Pass, Amex Centurion) offer the best value if you already hold a qualifying card, as they include food and drinks in the access fee.',
     },
     {
-      question: 'How do I find rest facilities at my airport?',
+      question: 'How do I find what rest facilities are available at my specific airport?',
       answer:
-        'Simply search for your airport by name or IATA code on RestInAirport. Each airport page lists all available rest options including sleep pods, lounges, free quiet zones, and transit hotels, with details on location, terminal, opening hours, pricing, and traveler tips.',
+        'Search by airport name or IATA code on RestInAirport. Each airport page lists all available facilities — sleep pods, transit hotels, private rooms, lounges, and free zones — with airside/landside status, terminal location, pricing, and opening hours. You can also filter by rest type, transit eligibility, and amenities.',
     },
   ];
 
@@ -832,179 +832,93 @@ export default function HomePage() {
 
               <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200 mt-8">
                 <h2 className="text-2xl font-bold text-slate-900 mb-6">
-                  Your Rest. Your Airport. Your Journey.
+                  About RestInAirport
                 </h2>
 
                 <div className="space-y-4 text-lg text-slate-700 leading-relaxed">
                   <p>
-                    Traveling is exhausting enough without spending your layover hunting for a
-                    comfortable place to sit, let alone sleep. RestInAirport was built to solve
-                    exactly that problem. We have mapped{' '}
-                    <a
-                      href="/airports"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigateTo('/airports');
-                      }}
-                      className="text-slate-900 font-semibold hover:underline"
-                    >
-                      rest facilities at airports
-                    </a>{' '}
-                    across every continent, from the{' '}
+                    RestInAirport is a directory of airport rest facilities worldwide — covering{' '}
                     <a
                       href="/sleep-pods"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigateTo('/sleep-pods');
-                      }}
+                      onClick={(e) => { e.preventDefault(); navigateTo('/sleep-pods'); }}
                       className="text-slate-900 font-semibold hover:underline"
                     >
                       sleep pods
-                    </a>{' '}
-                    of Heathrow and Frankfurt to the free snooze lounges of Changi and Incheon, so
-                    you always know what to expect before you arrive.
-                  </p>
-
-                  <p>
-                    Whether you need a quiet corner with a power outlet for a one-hour connection, a{' '}
+                    </a>
+                    ,{' '}
                     <a
                       href="/private-rooms"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigateTo('/private-rooms');
-                      }}
+                      onClick={(e) => { e.preventDefault(); navigateTo('/private-rooms'); }}
                       className="text-slate-900 font-semibold hover:underline"
                     >
-                      private sleep pod
-                    </a>{' '}
-                    for a four-hour layover, or a full{' '}
+                      private rooms
+                    </a>
+                    ,{' '}
                     <a
                       href="/transit-hotels"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigateTo('/transit-hotels');
-                      }}
+                      onClick={(e) => { e.preventDefault(); navigateTo('/transit-hotels'); }}
                       className="text-slate-900 font-semibold hover:underline"
                     >
-                      transit hotel room
-                    </a>{' '}
-                    after a cancelled flight, the right option exists. Our directory covers sleep
-                    pods,{' '}
+                      transit hotels
+                    </a>
+                    , and{' '}
                     <a
                       href="/lounge-sleep"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigateTo('/lounge-sleep');
-                      }}
+                      onClick={(e) => { e.preventDefault(); navigateTo('/lounge-sleep'); }}
                       className="text-slate-900 font-semibold hover:underline"
                     >
-                      airport lounges
-                    </a>
-                    , free rest zones, transit hotels, shower facilities, and designated quiet areas
-                    at hundreds of airports worldwide.
+                      lounge rest options
+                    </a>{' '}
+                    at hundreds of international airports. Every listing includes terminal location, airside or landside status, pricing, and access requirements so you can plan before you arrive.
                   </p>
 
                   <p>
-                    Airport rest facilities are changing fast. Sleep pod brands are expanding into new
-                    terminals. Lounges are adding dedicated nap rooms. New transit hotels are opening
-                    airside. RestInAirport is updated regularly so the information you find here
-                    reflects what is actually available today. Every listing includes terminal
-                    location, opening hours, pricing, and real traveler notes to help you plan with
-                    confidence.
+                    The most important factor for transit passengers is whether a facility is airside — accessible without clearing immigration — or landside, which requires exiting the secure zone and may require a visa. RestInAirport flags this clearly for every listing. If you need to understand your transit visa options, check{' '}
+                    <a
+                      href="https://visainfoguide.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-slate-900 font-semibold hover:underline"
+                    >
+                      VisaInfoGuide.com
+                    </a>{' '}
+                    for country-specific entry rules before booking a landside facility.
                   </p>
 
                   <p>
-                    Your next layover does not have to mean stiff necks and hard seats.{' '}
+                    Browse by{' '}
                     <a
                       href="/airports"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigateTo('/airports');
-                      }}
+                      onClick={(e) => { e.preventDefault(); navigateTo('/airports'); }}
                       className="text-slate-900 font-semibold hover:underline"
                     >
-                      Search your airport
-                    </a>{' '}
-                    now and find the best place to rest, before your flight, between connections, or
-                    whenever the journey calls for a proper break.
+                      airport
+                    </a>
+                    , by rest type, or by brand to find the right option for your layover duration and access situation. Every listing is updated regularly to reflect current availability.
                   </p>
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200 mt-8">
-                <div className="text-center mb-8">
-                  <h2 className="text-3xl font-bold text-slate-900 mb-3">
-                    Explore Our Suite of Web Applications
-                  </h2>
-                  <p className="text-lg text-slate-600">
-                    Discover our family of specialized platforms designed to solve real problems and make your digital life easier.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <a
-                    href="https://visainfoguide.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="border border-slate-200 rounded-xl p-6 hover:shadow-lg hover:border-slate-300 transition-all flex flex-col"
-                  >
-                    <div className="flex items-start mb-4">
-                      <div className="w-20 h-20 bg-white rounded-lg flex items-center justify-center flex-shrink-0 mr-4">
-                        <img
-                          src="/VISAINFOGUIDE.png"
-                          alt="VisaInfoGuide.com"
-                          className="w-16 h-16 object-contain"
-                        />
-                      </div>
-                      <div>
-                        <div className="text-xs font-semibold text-blue-600 mb-1">IMMIGRATION & TRAVEL</div>
-                        <h3 className="text-xl font-bold text-slate-900">
-                          VisaInfo<br />Guide.com
-                        </h3>
-                      </div>
-                    </div>
-                    <p className="text-slate-600 mb-4 flex-1">
-                      Visit VisaInfoGuide.com, your trusted companion for navigating the world's visa landscape. Whether you're planning a short holiday, relocating abroad, or pursuing international opportunities, we cut through the red tape so you don't have to. Get clear, up-to-date guidance on visa requirements, application processes, and entry rules for countries worldwide. Travel smarter. Move with confidence.
+              <div className="bg-sky-50 border border-sky-200 rounded-2xl p-8 mt-8">
+                <div className="flex items-start gap-4">
+                  <div className="bg-sky-100 rounded-full p-3 flex-shrink-0">
+                    <ShieldCheck className="w-6 h-6 text-sky-700" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-sky-900 mb-2">Planning a Landside Stop?</h3>
+                    <p className="text-sky-800 leading-relaxed">
+                      If you need to exit the secure zone to reach a hotel or rest facility, you may need a transit visa depending on your nationality and destination country. Check visa-free access and airside transit rules at{' '}
+                      <a
+                        href="https://visainfoguide.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-semibold underline hover:text-sky-900"
+                      >
+                        VisaInfoGuide.com
+                      </a>{' '}
+                      before booking.
                     </p>
-                    <div className="text-blue-600 font-semibold flex items-center">
-                      Visit VisaInfoGuide.com
-                      <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
-                  </a>
-
-                  <a
-                    href="https://immigrationinfoguide.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="border border-slate-200 rounded-xl p-6 hover:shadow-lg hover:border-slate-300 transition-all flex flex-col"
-                  >
-                    <div className="flex items-start mb-4">
-                      <div className="w-20 h-20 bg-white rounded-lg flex items-center justify-center flex-shrink-0 mr-4">
-                        <img
-                          src="/immigration_OG.png"
-                          alt="ImmigrationInfoGuide.com"
-                          className="w-16 h-16 object-contain"
-                        />
-                      </div>
-                      <div>
-                        <div className="text-xs font-semibold text-blue-600 mb-1">IMMIGRATION & TRAVEL</div>
-                        <h3 className="text-xl font-bold text-slate-900">
-                          Immigration<br />InfoGuide.com
-                        </h3>
-                      </div>
-                    </div>
-                    <p className="text-slate-600 mb-4 flex-1">
-                      Visit ImmigrationInfoGuide.com, your go-to resource for understanding the immigration journey from start to finish. Moving to a new country is one of life's biggest decisions, and we're here to guide you through the process less overwhelming. Explore guides on residency permits, citizenship pathways, family reunification, work authorizations, and more. Reliable information, plain language, real answers, because your future deserves the best possible start.
-                    </p>
-                    <div className="text-blue-600 font-semibold flex items-center">
-                      Visit ImmigrationInfoGuide.com
-                      <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
-                  </a>
+                  </div>
                 </div>
               </div>
             </>
