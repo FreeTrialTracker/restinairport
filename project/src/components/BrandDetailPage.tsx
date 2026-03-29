@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Hotel, MapPin, Loader, Users } from 'lucide-react';
+import { Hotel, MapPin, Loader, Tag } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { AirportFacility } from '../lib/database.types';
 import SearchResults from './SearchResults';
 import Header from './Header';
 import Footer from './Footer';
-import { updatePageMeta } from '../lib/seo';
 import { navigateTo } from '../lib/navigation';
 import BackNavigation from './BackNavigation';
 import {
@@ -14,7 +13,22 @@ import {
   getFacilitiesForBrandSlug,
 } from '../lib/brandNormalization';
 import type { BrandType } from '../lib/brandNormalization';
-import { BrandSEOContent, generateBrandFAQSchema, getBrandMetaDescription, getBrandIntro } from './BrandSEOContent';
+import BrandSEOContent from './BrandSEOContent';
+import { BRAND_DATA } from '../lib/brandData';
+import { generateBrandContent } from '../lib/brandContentEngine';
+import { generateBrandFAQs } from '../lib/brandFaqEngine';
+import {
+  getBrandPageTitle,
+  getBrandMetaDescription,
+  getBrandCanonicalUrl,
+  generateBrandFAQSchema,
+  generateBrandBreadcrumbSchema,
+} from '../lib/brandMeta';
+import {
+  getBrandTypeLabel,
+  getBrandTypePluralLabel,
+  getBrandCategoryLabel,
+} from '../lib/brandScoring';
 import type { SSRBrandData } from '../App';
 
 interface BrandDetailPageProps {
@@ -22,25 +36,15 @@ interface BrandDetailPageProps {
   ssrData?: SSRBrandData;
 }
 
-function getBrandTypeLabel(brandType: BrandType): string {
-  if (brandType === 'Transit Hotel') return 'Transit Hotel';
-  if (brandType === 'Sleep Pods') return 'Sleep Pods';
-  if (brandType === 'Lounge Network') return 'Airport Lounge';
-  return 'Airport Rest Facility';
+function legacyTypeToCategory(brandType: BrandType) {
+  if (brandType === 'Transit Hotel') return 'hotel' as const;
+  if (brandType === 'Sleep Pods') return 'pod' as const;
+  if (brandType === 'Lounge Network') return 'lounge' as const;
+  return 'hybrid' as const;
 }
 
-function getBrandTypePluralLabel(brandType: BrandType): string {
-  if (brandType === 'Transit Hotel') return 'transit hotel rooms';
-  if (brandType === 'Sleep Pods') return 'sleep pods';
-  if (brandType === 'Lounge Network') return 'lounge access';
-  return 'rest facilities';
-}
-
-function getCategoryStatLabel(brandType: BrandType): string {
-  if (brandType === 'Transit Hotel') return 'Transit Hotel';
-  if (brandType === 'Sleep Pods') return 'Sleep Pods';
-  if (brandType === 'Lounge Network') return 'Lounge';
-  return 'Mixed';
+function slugToDisplayName(slug: string): string {
+  return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 }
 
 export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageProps) {
@@ -93,24 +97,6 @@ export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageP
           .filter(b => b.isPrimary)
           .map(b => ({ name: b.name, slug: b.slug }));
         setAllBrands(primaryBrands);
-
-        const airportCount = new Set(matchedFacilities.map(f => f.airport_code)).size;
-        const metaDesc = getBrandMetaDescription(matchedBrand.name, matchedBrand.brandType, matchedBrand.airportCodes, airportCount, brandSlug);
-        const typeLabel = getBrandTypeLabel(matchedBrand.brandType);
-
-        const faqSchema = generateBrandFAQSchema(
-          matchedBrand.name,
-          matchedBrand.brandType,
-          airportCount,
-          brandSlug
-        );
-
-        updatePageMeta(
-          `${matchedBrand.name} ${typeLabel} – Locations, Prices & Access | RestInAirport`,
-          metaDesc,
-          `${window.location.origin}/brand/${brandSlug}`,
-          faqSchema
-        );
       } else {
         setNotFound(true);
       }
@@ -128,30 +114,70 @@ export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageP
         new Map(facilities.map(f => [f.airport_code, { code: f.airport_code, name: f.airport }])).values()
       ).sort((a, b) => a.name.localeCompare(b.name));
 
-  const typeLabel = brandMeta ? getBrandTypeLabel(brandMeta.brandType) : 'Airport Rest Facility';
-  const typePluralLabel = brandMeta ? getBrandTypePluralLabel(brandMeta.brandType) : 'rest facilities';
+  const resolvedBrandType = brandMeta
+    ? legacyTypeToCategory(brandMeta.brandType)
+    : 'hybrid' as const;
 
-  const activeBrandName = brandName || brandSlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  const typeLabel = getBrandTypeLabel(resolvedBrandType);
+  const typePluralLabel = getBrandTypePluralLabel(resolvedBrandType);
 
-  const introText = brandMeta
-    ? getBrandIntro(activeBrandName, brandMeta.brandType, brandMeta.airportCodes, airportCount, brandSlug)
-    : `${activeBrandName} provides airport rest facilities at ${airportCount} ${airportCount === 1 ? 'airport' : 'airports'} worldwide. This guide covers locations, access rules, pricing, and transit passenger eligibility.`;
+  const activeBrandName = brandName || slugToDisplayName(brandSlug);
 
-  const metaDesc = brandMeta
-    ? getBrandMetaDescription(activeBrandName, brandMeta.brandType, brandMeta.airportCodes, airportCount, brandSlug)
-    : `${activeBrandName} airport rest facilities — locations, access rules, and pricing for transit passengers.`;
+  const brandRecord = BRAND_DATA[brandSlug];
+
+  const content = brandRecord
+    ? generateBrandContent(
+        brandRecord,
+        airportCount,
+        ssrData ? ssrData.facilityCount : facilities.length,
+        brandMeta?.airportCodes ?? []
+      )
+    : null;
+
+  const faqs = brandRecord ? generateBrandFAQs(brandRecord, airportCount) : [];
 
   const facilityCount = ssrData ? ssrData.facilityCount : facilities.length;
 
-  const slugTitle = brandSlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  const pageTitle = brandRecord
+    ? getBrandPageTitle(brandRecord, airportCount)
+    : `${activeBrandName} ${typeLabel} – Locations, Prices & Access | RestInAirport`;
+
+  const metaDesc = brandRecord
+    ? getBrandMetaDescription(brandRecord, airportCount)
+    : `${activeBrandName} airport rest facilities — locations, access rules, and pricing for transit passengers at ${airportCount} airports.`;
+
+  const canonical = getBrandCanonicalUrl(brandSlug);
+
+  const faqSchema = brandRecord ? generateBrandFAQSchema(faqs) : null;
+  const breadcrumbSchema = brandRecord ? generateBrandBreadcrumbSchema(brandRecord) : {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://restinairport.com' },
+      { '@type': 'ListItem', position: 2, name: 'Brands', item: 'https://restinairport.com/brands' },
+      { '@type': 'ListItem', position: 3, name: activeBrandName, item: canonical },
+    ],
+  };
+
+  const heroDescription = content?.heroDescription ??
+    `${activeBrandName} provides airport rest facilities at ${airportCount} ${airportCount === 1 ? 'airport' : 'airports'}. This guide covers locations, access rules, pricing, and transit passenger eligibility.`;
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col">
         <Helmet>
-          <title>{slugTitle} – Airport Rest Facility | RestInAirport</title>
-          <meta name="description" content={`${slugTitle} airport rest facilities — locations, access rules, pricing, and whether transit passengers can stay without clearing immigration.`} />
-          <link rel="canonical" href={`https://restinairport.com/brand/${brandSlug}`} />
+          <title>{pageTitle}</title>
+          <meta name="description" content={metaDesc} />
+          <link rel="canonical" href={canonical} />
+          <meta property="og:title" content={pageTitle} />
+          <meta property="og:description" content={metaDesc} />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content={canonical} />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={pageTitle} />
+          <meta name="twitter:description" content={metaDesc} />
+          <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
+          {faqSchema && <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>}
         </Helmet>
         <Header />
         <div className="flex-1 flex items-center justify-center">
@@ -168,6 +194,10 @@ export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageP
   if (notFound || (!loading && !brandName && !ssrData)) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col">
+        <Helmet>
+          <title>Brand Not Found | RestInAirport</title>
+          <meta name="robots" content="noindex" />
+        </Helmet>
         <Header />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
@@ -183,16 +213,18 @@ export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageP
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col">
       <Helmet>
-        <title>{activeBrandName} {typeLabel} – Locations, Prices & Access | RestInAirport</title>
+        <title>{pageTitle}</title>
         <meta name="description" content={metaDesc} />
-        <link rel="canonical" href={`https://restinairport.com/brand/${brandSlug}`} />
-        <meta property="og:title" content={`${activeBrandName} ${typeLabel} – Locations, Prices & Access | RestInAirport`} />
+        <link rel="canonical" href={canonical} />
+        <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={metaDesc} />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={`https://restinairport.com/brand/${brandSlug}`} />
+        <meta property="og:url" content={canonical} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${activeBrandName} ${typeLabel} | RestInAirport`} />
+        <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={metaDesc} />
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
+        {faqSchema && <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>}
       </Helmet>
       <Header />
 
@@ -207,16 +239,16 @@ export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageP
 
             <div className="mb-3">
               <span className="inline-block text-xs font-semibold uppercase tracking-widest text-slate-300 bg-slate-700 px-3 py-1 rounded-full">
-                {brandMeta ? getCategoryStatLabel(brandMeta.brandType) : typeLabel}
+                {getBrandCategoryLabel(resolvedBrandType)}
               </span>
             </div>
 
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              {activeBrandName} {typeLabel}
+              {content?.heroTagline ?? `${activeBrandName} ${typeLabel}`}
             </h1>
 
             <p className="text-lg text-slate-200 max-w-3xl mb-8 leading-relaxed">
-              {introText}
+              {heroDescription}
             </p>
 
             <div className="flex flex-wrap gap-6">
@@ -235,9 +267,9 @@ export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageP
                 </div>
               </div>
               <div className="flex items-center space-x-2">
-                <Users className="w-6 h-6" />
+                <Tag className="w-6 h-6" />
                 <div>
-                  <div className="text-2xl font-bold">{brandMeta ? getCategoryStatLabel(brandMeta.brandType) : typeLabel}</div>
+                  <div className="text-xl font-bold leading-tight">{getBrandCategoryLabel(resolvedBrandType)}</div>
                   <div className="text-sm text-slate-300">Category</div>
                 </div>
               </div>
@@ -249,22 +281,31 @@ export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageP
 
           {uniqueAirports.length > 0 && (
             <section>
-              <h2 className="text-2xl font-bold text-slate-900 mb-3">Where You'll Find {activeBrandName}</h2>
+              <h2 className="text-2xl font-bold text-slate-900 mb-3">
+                Where You'll Find {activeBrandName}
+              </h2>
               <p className="text-slate-600 mb-5 max-w-3xl leading-relaxed">
-                {activeBrandName} {typePluralLabel} are available at {airportCount} {airportCount === 1 ? 'airport' : 'airports'} worldwide. Terminal placement and access rules differ by location — confirm your specific terminal before travel.
+                {activeBrandName} {typePluralLabel} are available at {airportCount}{' '}
+                {airportCount === 1 ? 'airport' : 'airports'} worldwide. Terminal placement and
+                access rules differ by location — confirm your specific terminal before travel.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-w-3xl">
                 {uniqueAirports.map(airport => (
                   <a
                     key={airport.code}
                     href={`/airport/${airport.code.toLowerCase()}`}
-                    onClick={(e) => { e.preventDefault(); navigateTo(`/airport/${airport.code.toLowerCase()}`); }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigateTo(`/airport/${airport.code.toLowerCase()}`);
+                    }}
                     className="flex items-center gap-3 px-4 py-3 bg-white border border-slate-200 rounded-xl hover:border-slate-300 hover:bg-slate-50 transition-colors group"
                   >
                     <span className="inline-flex items-center justify-center w-10 h-10 bg-slate-100 group-hover:bg-slate-200 rounded-lg text-xs font-bold text-slate-700 transition-colors flex-shrink-0">
                       {airport.code}
                     </span>
-                    <span className="text-sm font-medium text-slate-700 leading-tight">{airport.name}</span>
+                    <span className="text-sm font-medium text-slate-700 leading-tight">
+                      {airport.name}
+                    </span>
                   </a>
                 ))}
               </div>
@@ -273,7 +314,9 @@ export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageP
 
           {facilities.length > 0 && (
             <section>
-              <h2 className="text-2xl font-bold text-slate-900 mb-3">All {activeBrandName} Locations</h2>
+              <h2 className="text-2xl font-bold text-slate-900 mb-3">
+                All {activeBrandName} Locations
+              </h2>
               <SearchResults facilities={facilities} query="" />
             </section>
           )}
@@ -281,15 +324,15 @@ export default function BrandDetailPage({ brandSlug, ssrData }: BrandDetailPageP
         </div>
 
         <div className="border-t border-slate-200 bg-white pt-14">
-          {brandMeta && (
+          {brandMeta && content && brandRecord && (
             <BrandSEOContent
               brandName={activeBrandName}
               brandSlug={brandSlug}
-              brandType={brandMeta.brandType}
-              facilityCount={facilityCount}
-              airportCount={airportCount}
-              airportCodes={brandMeta.airportCodes}
+              content={content}
+              faqs={faqs}
               allBrandSlugs={allBrands}
+              compareCandidates={brandRecord.compareCandidates}
+              brand={brandRecord}
             />
           )}
         </div>
