@@ -105,7 +105,7 @@ function buildTitle(brand: BrandRecord, angle: PositioningAngle): string {
     }
 
     case 'global-lounge': {
-      return `${brand.name} Lounge – Access at 100+ Airports Worldwide | ${SITE_SUFFIX}`;
+      return `${brand.name} Lounge – Access at ${brand.airportCount}+ Airports Worldwide | ${SITE_SUFFIX}`;
     }
 
     case 'hub-specialist': {
@@ -171,7 +171,7 @@ function buildDescription(brand: BrandRecord, angle: PositioningAngle): string {
       break;
 
     case 'global-lounge':
-      desc = `${brand.name} independent airport lounges at ${airports}+ locations worldwide — open to any passenger, hot food, showers, and Wi-Fi included. No airline status needed.`;
+      desc = `${brand.name} independent airport lounges at ${brand.facilityCount}+ locations across ${airports}+ airports worldwide — open to any passenger, hot food, showers, and Wi-Fi included. No airline status needed.`;
       break;
 
     case 'hub-specialist':
