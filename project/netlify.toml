@@ -1,3 +1,9 @@
+[[redirects]]
+  from = "/:path/"
+  to = "/:path"
+  status = 301
+  force = true
+
 [build]
   command = "npm run prerender"
   publish = "dist/client"
